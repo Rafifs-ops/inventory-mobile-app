@@ -1,0 +1,5 @@
+{
+  "appId": "com.apps.inventory",
+  "appName": "InventoryApp",
+  "webDir": "dist"
+}
