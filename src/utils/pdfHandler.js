@@ -4,30 +4,41 @@ import { Capacitor } from '@capacitor/core';
 
 export const saveAndSharePDF = async (doc, filename) => {
     try {
+        // 1. Sanitasi: Hilangkan karakter yang dilarang pada sistem file (seperti / \ : * ? " < > |)
+        let safeFilename = filename.replace(/[/\\?%*:|"<>]/g, '-');
+
+        // 2. Pastikan file selalu memiliki ekstensi .pdf di akhirnya
+        if (!safeFilename.toLowerCase().endsWith('.pdf')) {
+            safeFilename += '.pdf';
+        }
+
         if (Capacitor.isNativePlatform()) {
-            // Dapatkan output PDF dalam bentuk string base64
+            // Dapatkan output PDF
             const pdfDataUri = doc.output('datauristring');
-            const pdfBase64 = pdfDataUri.split(',')[1];
-            
+
+            // 3. Ekstrak base64 dengan mencari indeks yang pasti (menghindari error karena tanda koma)
+            const base64Index = pdfDataUri.indexOf('base64,') + 7;
+            const pdfBase64 = pdfDataUri.substring(base64Index);
+
             // Simpan sementara ke folder Cache
             const savedFile = await Filesystem.writeFile({
-                path: filename,
+                path: safeFilename,
                 data: pdfBase64,
                 directory: Directory.Cache,
             });
-            
+
             // Munculkan dialog native untuk membagikan/membuka/menyimpan file
             await Share.share({
-                title: filename,
+                title: safeFilename,
                 url: savedFile.uri,
                 dialogTitle: 'Buka atau Simpan PDF'
             });
         } else {
             // Fallback untuk web browser
-            doc.save(filename);
+            doc.save(safeFilename);
         }
     } catch (error) {
         console.error('Error saat menyimpan atau membagikan PDF:', error);
-        alert('Gagal menyimpan atau membagikan PDF. Silakan periksa izin aplikasi.');
+        alert('Gagal menyimpan dokumen. Pastikan penyimpanan perangkat Anda cukup dan coba kembali.');
     }
 };
