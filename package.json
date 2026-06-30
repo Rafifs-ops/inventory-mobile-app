@@ -13,8 +13,13 @@
     "@capacitor/barcode-scanner": "^3.0.2",
     "@capacitor/cli": "^8.4.0",
     "@capacitor/core": "^8.4.0",
+    "@capacitor/filesystem": "^8.1.2",
+    "@capacitor/share": "^8.0.1",
     "@tailwindcss/vite": "^4.3.0",
+    "dayjs": "^1.11.21",
     "dexie": "^4.4.3",
+    "jspdf": "^4.2.1",
+    "jspdf-autotable": "^5.0.8",
     "tailwindcss": "^4.3.0",
     "vue": "^3.5.32",
     "vue-router": "^5.0.4"

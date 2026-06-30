@@ -1,50 +1,73 @@
 <template>
-    <div class="min-h-screen bg-gray-900 text-gray-100 p-6 flex flex-col items-center">
-        <div class="w-full max-w-md mt-6">
-            <h2 class="text-3xl font-bold text-center text-white mb-8">Daftar Inventaris</h2>
+    <div class="min-h-screen bg-gray-50 text-slate-800 p-6 flex flex-col items-center py-12">
 
-            <div class="space-y-4">
-                <div v-for="item in productList" :key="item.id"
-                    class="flex justify-between items-center p-4 bg-gray-800 rounded-2xl border border-gray-700 hover:border-gray-500 transition-colors">
-                    <div class="flex-1">
-                        <h4 class="font-bold text-lg text-white">{{ item.nama }}</h4>
-                        <p class="text-xs text-gray-500 font-mono mt-1">ID: {{ item.id }}</p>
-                        <p class="text-xs text-gray-400 mt-1">
-                            Harga: <span class="text-cyan-400">Rp {{ item.harga.toLocaleString('id-ID') }}</span>
-                            <span class="mx-1">|</span>
-                            Modal: <span class="text-purple-400">Rp {{ (item.hpp || 0).toLocaleString('id-ID') }}</span>
-                        </p>
+        <div class="w-full max-w-2xl mb-8 text-center">
+            <h2 class="text-2xl font-bold text-slate-800 tracking-tight">Daftar Inventaris</h2>
+            <p class="text-sm text-slate-500 mt-1">Kelola dan pantau seluruh data barang yang terdaftar di sistem</p>
+        </div>
+
+        <div class="w-full max-w-2xl space-y-3">
+
+            <div v-for="item in productList" :key="item.id"
+                class="flex justify-between items-center p-4 bg-white rounded-xl border border-gray-200 shadow-sm hover:shadow hover:border-blue-300 transition-all group">
+
+                <div class="flex-1">
+                    <div class="flex items-center gap-3 mb-2">
+                        <h4 class="font-semibold text-slate-800 text-lg">{{ item.nama }}</h4>
+                        <span
+                            class="px-2 py-0.5 text-xs font-mono text-slate-500 bg-slate-100 rounded border border-slate-200">
+                            ID: {{ item.id }}
+                        </span>
                     </div>
 
-                    <div class="ml-4">
-                        <button @click="konfirmasiHapus(item.id, item.nama)"
-                            class="p-2 text-red-500 bg-red-500/10 rounded-xl hover:bg-red-500 hover:text-white transition-all active:scale-95"
-                            title="Hapus Barang">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16">
-                                </path>
-                            </svg>
-                        </button>
+                    <div class="flex items-center text-sm gap-6 mt-1">
+                        <div>
+                            <span class="text-slate-400 text-xs block mb-0.5">Harga Jual</span>
+                            <span class="font-medium text-slate-700">Rp {{ item.harga.toLocaleString('id-ID') }}</span>
+                        </div>
+                        <div class="w-px h-6 bg-gray-200"></div>
+                        <div>
+                            <span class="text-slate-400 text-xs block mb-0.5">Harga Pokok (HPP)</span>
+                            <span class="font-medium text-slate-700">Rp {{ (item.hpp || 0).toLocaleString('id-ID')
+                            }}</span>
+                        </div>
                     </div>
+                </div>
+
+                <div class="ml-4 pl-4 border-l border-gray-100 flex items-center">
+                    <button @click="konfirmasiHapus(item.id, item.nama)"
+                        class="p-2.5 text-slate-400 bg-white rounded-lg hover:bg-rose-50 hover:text-rose-600 focus:outline-none focus:ring-2 focus:ring-rose-500 transition-colors"
+                        title="Hapus Barang">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16">
+                            </path>
+                        </svg>
+                    </button>
                 </div>
             </div>
 
-            <div v-if="productList.length === 0" class="text-center text-gray-500 mt-10">
-                Belum ada barang di database.
+            <div v-if="productList.length === 0"
+                class="w-full p-12 text-center bg-white border border-gray-200 border-dashed rounded-xl shadow-sm">
+                <svg class="mx-auto h-12 w-12 text-slate-300" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                    aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
+                </svg>
+                <h3 class="mt-2 text-sm font-semibold text-slate-900">Belum ada data barang</h3>
+                <p class="mt-1 text-sm text-slate-500">Tidak ada produk yang terdaftar di database saat ini.</p>
             </div>
 
-            <RouterLink to="/" class="inline-flex mt-6">
-                <button
-                    class="px-5 py-2.5 rounded-full font-semibold text-sm bg-gray-800/80 backdrop-blur-sm border border-cyan-500/40 text-cyan-400 shadow-[0_0_10px_rgba(6,182,212,0.2)] hover:shadow-[0_0_20px_rgba(6,182,212,0.6)] hover:bg-cyan-500/10 hover:-translate-y-0.5 transition-all duration-300 active:scale-95 flex justify-center items-center gap-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24"
-                        stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-                    </svg>
-                    Kembali ke Menu Utama
-                </button>
-            </RouterLink>
         </div>
+
+        <RouterLink to="/"
+            class="mt-8 flex items-center justify-center text-sm font-medium text-slate-500 hover:text-blue-600 transition-colors">
+            <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+            </svg>
+            Kembali ke Menu Utama
+        </RouterLink>
+
     </div>
 </template>
 

@@ -1,10 +1,10 @@
 import Dexie from 'dexie';
 
-// Membuat instance database baru bernama "InventoryDB"
 export const db = new Dexie('InventoryDB');
 
-// Mendefinisikan tabel dan Primary Key
-// 'id' di sini akan bertindak sebagai Primary Key (berisi kode barcode)
-db.version(1).stores({
-    produk: 'id, nama, harga, hpp'
+// Tingkatkan versi menjadi 2 untuk menambahkan tabel baru tanpa menghapus data lama
+db.version(2).stores({
+    produk: 'id, nama, harga, hpp',
+    penjualan: '++id, tanggal, totalPenjualan, totalHpp, *items', // Menyimpan riwayat transaksi
+    pengeluaran: '++id, bulanTahun, jenis, nominal, keterangan' // jenis: 'operasional' | 'bahan_baku'
 });

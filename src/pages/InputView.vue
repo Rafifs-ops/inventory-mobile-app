@@ -1,22 +1,29 @@
 <template>
-    <div class="min-h-screen p-6 flex flex-col items-center bg-gray-900 text-gray-100">
-        <div class="w-full max-w-md mt-10">
-            <h2
-                class="mb-8 text-3xl font-bold text-center text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-500">
-                Input Produk Baru
-            </h2>
+    <div class="min-h-screen bg-gray-50 text-slate-800 p-6 flex flex-col items-center py-12">
 
-            <form @submit.prevent="simpanProduk" class="p-6 space-y-5 border bg-gray-800 rounded-2xl border-gray-700">
+        <div class="w-full max-w-md mb-6 text-center">
+            <h2 class="text-2xl font-bold text-slate-800 tracking-tight">
+                Registrasi Produk Baru
+            </h2>
+            <p class="text-sm text-slate-500 mt-1">
+                Masukkan data barang baru ke dalam sistem inventaris
+            </p>
+        </div>
+
+        <div class="w-full max-w-md bg-white border border-gray-200 shadow-sm rounded-xl overflow-hidden">
+            <form @submit.prevent="simpanProduk" class="p-6 space-y-5">
 
                 <div>
-                    <label class="block mb-2 text-sm text-gray-400">ID Barcode</label>
+                    <label class="block mb-1.5 text-sm font-medium text-slate-700">
+                        ID Barcode / SKU <span class="text-red-500">*</span>
+                    </label>
                     <div class="flex gap-2">
                         <input v-model="form.id" type="text" required placeholder="Ketik atau scan ID..."
-                            class="flex-1 p-3 text-white transition-all border font-mono bg-gray-900 border-gray-600 rounded-xl focus:border-purple-500 focus:ring-1 focus:ring-purple-500 focus:outline-none placeholder-gray-600" />
-                        <button type="button" @click="scanIdSaja"
-                            class="flex items-center justify-center px-4 transition-all border border-cyan-500/50 bg-gray-900 rounded-xl text-cyan-400 hover:bg-cyan-500/10 active:scale-95"
-                            title="Scan Barcode">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            class="flex-1 p-2.5 text-slate-800 bg-white border border-gray-300 rounded-lg shadow-sm font-mono focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-shadow" />
+
+                        <button type="button" @click="scanIdSaja" title="Scan Barcode"
+                            class="flex items-center justify-center px-4 bg-slate-50 border border-gray-300 text-slate-600 rounded-lg shadow-sm hover:bg-slate-100 hover:text-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm14 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z">
                                 </path>
@@ -26,40 +33,56 @@
                 </div>
 
                 <div>
-                    <label class="block mb-2 text-sm text-gray-400">Nama Barang</label>
-                    <input v-model="form.nama" type="text" required placeholder="Contoh: Kopi Sachet"
-                        class="w-full p-3 text-white transition-all border bg-gray-900 border-gray-600 rounded-xl focus:border-purple-500 focus:ring-1 focus:ring-purple-500 focus:outline-none" />
+                    <label class="block mb-1.5 text-sm font-medium text-slate-700">
+                        Nama Barang <span class="text-red-500">*</span>
+                    </label>
+                    <input v-model="form.nama" type="text" required placeholder="Contoh: Kopi Sachet Spesial"
+                        class="w-full p-2.5 text-slate-800 bg-white border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-shadow" />
                 </div>
 
                 <div>
-                    <label class="block mb-2 text-sm text-gray-400">Harga Jual (Rp)</label>
-                    <input v-model="form.harga" type="number" required placeholder="0"
-                        class="w-full p-3 text-white transition-all border bg-gray-900 border-gray-600 rounded-xl focus:border-purple-500 focus:ring-1 focus:ring-purple-500 focus:outline-none" />
+                    <label class="block mb-1.5 text-sm font-medium text-slate-700">
+                        Harga Jual <span class="text-red-500">*</span>
+                    </label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                            <span class="text-slate-500 sm:text-sm">Rp</span>
+                        </div>
+                        <input v-model="form.harga" type="number" min="0" required placeholder="0"
+                            class="w-full p-2.5 pl-10 text-slate-800 bg-white border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-shadow" />
+                    </div>
                 </div>
 
                 <div>
-                    <label class="block mb-2 text-sm text-gray-400">HPP (Rp)</label>
-                    <input v-model="form.hpp" type="number" required placeholder="0"
-                        class="w-full p-3 text-white transition-all border bg-gray-900 border-gray-600 rounded-xl focus:border-purple-500 focus:ring-1 focus:ring-purple-500 focus:outline-none" />
+                    <label class="block mb-1.5 text-sm font-medium text-slate-700">
+                        Harga Pokok Penjualan (HPP) <span class="text-red-500">*</span>
+                    </label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                            <span class="text-slate-500 sm:text-sm">Rp</span>
+                        </div>
+                        <input v-model="form.hpp" type="number" min="0" required placeholder="0"
+                            class="w-full p-2.5 pl-10 text-slate-800 bg-white border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-shadow" />
+                    </div>
                 </div>
 
-                <button type="submit"
-                    class="w-full py-4 mt-6 font-bold text-white transition-all rounded-xl bg-gradient-to-r from-purple-500 to-pink-600 hover:opacity-90 active:scale-95 shadow-[0_0_15px_rgba(168,85,247,0.4)]">
-                    Simpan Produk
-                </button>
+                <div class="pt-2">
+                    <button type="submit"
+                        class="w-full py-2.5 text-sm font-semibold text-white bg-blue-600 rounded-lg shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors">
+                        Simpan Data Produk
+                    </button>
+                </div>
             </form>
-
-            <RouterLink to="/" class="inline-flex mt-6">
-                <button
-                    class="px-5 py-2.5 rounded-full font-semibold text-sm bg-gray-800/80 backdrop-blur-sm border border-cyan-500/40 text-cyan-400 shadow-[0_0_10px_rgba(6,182,212,0.2)] hover:shadow-[0_0_20px_rgba(6,182,212,0.6)] hover:bg-cyan-500/10 hover:-translate-y-0.5 transition-all duration-300 active:scale-95 flex justify-center items-center gap-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24"
-                        stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-                    </svg>
-                    Kembali ke Menu Utama
-                </button>
-            </RouterLink>
         </div>
+
+        <RouterLink to="/"
+            class="mt-6 flex items-center justify-center text-sm font-medium text-slate-500 hover:text-blue-600 transition-colors">
+            <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+            </svg>
+            Kembali ke Menu Utama
+        </RouterLink>
+
     </div>
 </template>
 
