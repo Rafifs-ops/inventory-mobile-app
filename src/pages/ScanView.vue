@@ -158,7 +158,7 @@ const prosesPenjualan = async () => {
         alert('Penjualan berhasil dicatat dan nota siap!');
     } catch (error) {
         console.error('Gagal menyimpan penjualan:', error);
-        alert('Terjadi kesalahan saat memproses penjualan.');
+        alert('Terjadi kesalahan saat memproses penjualan.' + ' ' + error);
     }
 };
 
