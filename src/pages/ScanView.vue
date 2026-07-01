@@ -45,13 +45,17 @@
                     <div class="flex justify-between items-start">
                         <div>
                             <div class="flex items-center gap-2 mb-1">
-                                <h4 class="text-base font-bold text-slate-800">{{ produk.nama }}</h4>
+                                <h4 class="text-base font-bold text-slate-800">{{ produk.nama }} <span
+                                        class="text-sm text-slate-500">x{{ produk.qty }}</span></h4>
                                 <span
                                     class="px-2 py-0.5 text-[10px] font-bold text-emerald-700 bg-emerald-100 rounded uppercase tracking-wider">
                                     Berhasil
                                 </span>
                             </div>
-                            <p class="text-sm font-medium text-slate-600">Rp {{ produk.harga.toLocaleString('id-ID') }}
+                            <p class="text-sm font-medium text-slate-600">Rp {{ (produk.harga *
+                                produk.qty).toLocaleString('id-ID') }}
+                                <span class="text-xs text-slate-400 font-normal">(@Rp {{
+                                    produk.harga.toLocaleString('id-ID') }})</span>
                             </p>
                         </div>
                     </div>
@@ -66,7 +70,7 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
                             </svg>
-                            Margin Rp {{ (produk.harga - (produk.hpp || 0)).toLocaleString('id-ID') }}
+                            Margin Rp {{ ((produk.harga - (produk.hpp || 0)) * produk.qty).toLocaleString('id-ID') }}
                         </span>
                     </div>
                 </div>
@@ -100,10 +104,11 @@ import { db } from '../database/db';
 import dayjs from 'dayjs';
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
+import autoTable from 'jspdf-autotable';
 import { saveAndSharePDF } from '../utils/pdfHandler';
 
 const router = useRouter();
-const { getProduct } = useProducts();
+const { getProduct, decreaseProductStock } = useProducts();
 
 const barangDitemukan = ref([]);
 const totalPenjualan = ref(0);
@@ -121,14 +126,20 @@ const mulaiScan = async () => {
             const produk = await getProduct(scannedId);
 
             if (produk) {
-                barangDitemukan.value.push(produk);
+                const existingItemIndex = barangDitemukan.value.findIndex(item => item.id === produk.id);
+                if (existingItemIndex !== -1) {
+                    barangDitemukan.value[existingItemIndex].qty += 1;
+                } else {
+                    produk.qty = 1;
+                    barangDitemukan.value.push(produk);
+                }
+
                 const modalHpp = Number(produk.hpp) || 0;
                 totalPenjualan.value += Number(produk.harga);
                 totalKeuntungan.value += (Number(produk.harga) - modalHpp);
                 totalHppKasir.value += modalHpp;
             } else {
                 alert(`Produk belum terdaftar.`);
-                router.push({ path: '/input', query: { newId: scannedId } });
             }
         }
     } catch (error) {
@@ -153,7 +164,12 @@ const prosesPenjualan = async () => {
         // 2. Buat Nota PDF
         await cetakNota(tanggal);
 
-        // 3. Reset kasir
+        // 3. Kurangi stok produk
+        for (const item of barangDitemukan.value) {
+            await decreaseProductStock(item.id, item.qty);
+        }
+
+        // 4. Reset kasir
         resetTotal();
         alert('Penjualan berhasil dicatat dan nota siap!');
     } catch (error) {
@@ -173,14 +189,16 @@ const cetakNota = async (tanggal) => {
     const tableData = barangDitemukan.value.map((p, index) => [
         index + 1,
         p.nama,
-        `Rp ${Number(p.harga).toLocaleString('id-ID')}`
+        p.qty,
+        `Rp ${Number(p.harga).toLocaleString('id-ID')}`,
+        `Rp ${(Number(p.harga) * p.qty).toLocaleString('id-ID')}`
     ]);
 
-    doc.autoTable({
+    autoTable(doc, {
         startY: 35,
-        head: [['No', 'Nama Produk', 'Harga']],
+        head: [['No', 'Nama Produk', 'Qty', 'Harga', 'Subtotal']],
         body: tableData,
-        foot: [['', 'TOTAL', `Rp ${totalPenjualan.value.toLocaleString('id-ID')}`]],
+        foot: [['', 'TOTAL', '', '', `Rp ${totalPenjualan.value.toLocaleString('id-ID')}`]],
         theme: 'striped'
     });
 

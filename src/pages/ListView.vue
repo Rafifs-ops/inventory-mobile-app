@@ -31,6 +31,11 @@
                             <span class="font-medium text-slate-700">Rp {{ (item.hpp || 0).toLocaleString('id-ID')
                             }}</span>
                         </div>
+                        <div class="w-px h-6 bg-gray-200"></div>
+                        <div>
+                            <span class="text-slate-400 text-xs block mb-0.5">Stok</span>
+                            <span class="font-medium text-blue-600">{{ item.quantity || 0 }}</span>
+                        </div>
                     </div>
                 </div>
 

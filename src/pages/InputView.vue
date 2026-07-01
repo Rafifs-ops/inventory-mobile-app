@@ -66,6 +66,14 @@
                     </div>
                 </div>
 
+                <div>
+                    <label class="block mb-1.5 text-sm font-medium text-slate-700">
+                        Quantity (Stok) <span class="text-red-500">*</span>
+                    </label>
+                    <input v-model="form.quantity" type="number" min="0" required placeholder="0"
+                        class="w-full p-2.5 text-slate-800 bg-white border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-shadow" />
+                </div>
+
                 <div class="pt-2">
                     <button type="submit"
                         class="w-full py-2.5 text-sm font-semibold text-white bg-blue-600 rounded-lg shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors">
@@ -100,7 +108,8 @@ const form = reactive({
     id: '',
     nama: '',
     hpp: '',
-    harga: ''
+    harga: '',
+    quantity: ''
 });
 
 // Menangkap ID jika user dialihkan dari halaman "Cek Produk" (ScanView.vue)
@@ -136,15 +145,26 @@ const simpanProduk = async () => {
         return;
     }
 
-    // Tambahkan await di sini
-    await addProduct({
-        id: form.id,
-        nama: form.nama,
-        hpp: Number(form.hpp),
-        harga: Number(form.harga)
-    });
-
-    alert('Berhasil disimpan!');
-    router.push('/list');
-};
+    try {
+        // Tambahkan await di sini
+        await addProduct({
+            id: form.id,
+            nama: form.nama,
+            hpp: Number(form.hpp),
+            harga: Number(form.harga),
+            quantity: Number(form.quantity)
+        });
+        alert(`Barang ${form.nama} berhasil disimpan!`);
+    } catch (error) {
+        console.error('Gagal menyimpan produk:', error);
+        alert('Gagal menyimpan produk!');
+        return;
+    } finally {
+        form.id = '';
+        form.nama = '';
+        form.hpp = '';
+        form.harga = '';
+        form.quantity = '';
+    };
+}
 </script>

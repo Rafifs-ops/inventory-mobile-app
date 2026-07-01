@@ -52,7 +52,7 @@
 
             <div class="space-y-4">
                 <div>
-                    <label class="block mb-1.5 text-sm font-medium text-slate-700">Simulasi Margin Keuntungan</label>
+                    <label class="block mb-1.5 text-sm font-medium text-slate-700">Target Keuntungan</label>
                     <div class="relative w-full sm:w-1/2">
                         <input v-model="margin" type="number" min="0" placeholder="0"
                             class="w-full p-2.5 pr-8 text-slate-800 bg-white border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-shadow">

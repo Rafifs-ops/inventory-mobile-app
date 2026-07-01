@@ -50,14 +50,15 @@
                 </div>
             </div>
 
-            <div class="bg-white border border-gray-200 rounded-xl shadow-sm mb-6 overflow-hidden">
+            <div v-if="produkTerlaris || produkPalingSepi"
+                class="bg-white border border-gray-200 rounded-xl shadow-sm mb-6 overflow-hidden">
                 <div class="px-5 py-4 border-b border-gray-100 bg-slate-50/50">
-                    <h3 class="text-sm font-bold text-slate-800 uppercase tracking-wide">Analisis Produk (Bulan Ini)
+                    <h3 class="text-sm font-bold text-slate-800 uppercase tracking-wide">Ranking Product (Bulan Ini)
                     </h3>
                 </div>
 
                 <div class="p-5 space-y-4">
-                    <div v-if="produkTerlaris" class="flex items-start">
+                    <div class="flex items-start">
                         <div class="flex-shrink-0 mt-0.5">
                             <svg class="w-5 h-5 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -65,7 +66,7 @@
                             </svg>
                         </div>
                         <div class="ml-3">
-                            <p class="text-sm font-semibold text-slate-700">Pergerakan Cepat (Top Sales)</p>
+                            <p class="text-sm font-semibold text-slate-700">Produk paling laku</p>
                             <p class="text-sm text-slate-500 mt-0.5">
                                 {{ produkTerlaris.nama }} &mdash; <span class="font-medium text-slate-700">{{
                                     produkTerlaris.qty }} unit</span> terjual
@@ -75,7 +76,7 @@
 
                     <div class="border-t border-gray-100"></div>
 
-                    <div v-if="produkPalingSepi" class="flex items-start">
+                    <div class="flex items-start">
                         <div class="flex-shrink-0 mt-0.5">
                             <svg class="w-5 h-5 text-rose-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -83,7 +84,7 @@
                             </svg>
                         </div>
                         <div class="ml-3">
-                            <p class="text-sm font-semibold text-slate-700">Pergerakan Lambat (Slow Moving)</p>
+                            <p class="text-sm font-semibold text-slate-700">Produk paling sepi</p>
                             <p class="text-sm text-slate-500 mt-0.5">
                                 {{ produkPalingSepi.nama }} &mdash; <span class="font-medium text-slate-700">{{
                                     produkPalingSepi.qty }} unit</span> terjual
@@ -91,6 +92,10 @@
                         </div>
                     </div>
                 </div>
+            </div>
+
+            <div v-else class="flex items-center justify-center">
+                <p class="text-sm text-slate-500">Tidak ada data penjualan</p>
             </div>
 
             <button @click="eksporLabaRugi"
@@ -121,6 +126,7 @@ import { db } from '../database/db';
 import dayjs from 'dayjs';
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
+import autoTable from 'jspdf-autotable';
 import { saveAndSharePDF } from '../utils/pdfHandler';
 
 const filterBulan = ref(dayjs().format('YYYY-MM'));
@@ -131,8 +137,9 @@ const produkPalingSepi = ref(null);
 
 // Variabel untuk PDF
 const dTotalHpp = ref(0);
-const dBiayaOps = ref(0);
-const dBiayaBahan = ref(0);
+const dBiayaPemasaran = ref(0);
+const dBiayaAdmin = ref(0);
+const dBiayaSewa = ref(0);
 
 const muatData = async () => {
     const bulanAwal = dayjs(filterBulan.value).startOf('month').format('YYYY-MM-DD HH:mm:ss');
@@ -153,11 +160,12 @@ const muatData = async () => {
     dTotalHpp.value = penjualanBulanIni.reduce((sum, item) => sum + item.totalHpp, 0);
 
     // Kalkulasi Biaya
-    dBiayaOps.value = pengeluaranBulanIni.filter(p => p.jenis === 'operasional').reduce((sum, item) => sum + item.nominal, 0);
-    dBiayaBahan.value = pengeluaranBulanIni.filter(p => p.jenis === 'bahan_baku').reduce((sum, item) => sum + item.nominal, 0);
+    dBiayaPemasaran.value = pengeluaranBulanIni.filter(p => p.jenis === 'pemasaran').reduce((sum, item) => sum + item.nominal, 0);
+    dBiayaAdmin.value = pengeluaranBulanIni.filter(p => p.jenis === 'admin').reduce((sum, item) => sum + item.nominal, 0);
+    dBiayaSewa.value = pengeluaranBulanIni.filter(p => p.jenis === 'sewa').reduce((sum, item) => sum + item.nominal, 0);
 
-    // Rumus Laba Rugi: Penjualan - HPP Terjual - (Operasional + Bahan Baku)
-    labaBersih.value = totalJualBulanan.value - dTotalHpp.value - (dBiayaOps.value + dBiayaBahan.value);
+    // Rumus Laba Rugi: Penjualan - HPP Terjual - (Operasional + Pemasaran + Admin + Sewa)
+    labaBersih.value = totalJualBulanan.value - dTotalHpp.value - dBiayaPemasaran.value - dBiayaAdmin.value - dBiayaSewa.value;
 
     // Hitung Produk Terlaris / Sepi
     hitungStatistikProduk(penjualanBulanIni);
@@ -190,22 +198,23 @@ const eksporLabaRugi = async () => {
     doc.setFontSize(16);
     doc.text(`Laporan Laba Rugi - Periode: ${filterBulan.value}`, 14, 20);
 
-    doc.autoTable({
+    autoTable(doc, {
         startY: 30,
         body: [
             ['Total Pendapatan Penjualan', `Rp ${totalJualBulanan.value.toLocaleString('id-ID')}`],
             ['Dikurangi: Total HPP Produk Terjual', `(Rp ${dTotalHpp.value.toLocaleString('id-ID')})`],
             ['Laba Kotor', `Rp ${(totalJualBulanan.value - dTotalHpp.value).toLocaleString('id-ID')}`],
             ['', ''],
-            ['Dikurangi: Biaya Operasional', `(Rp ${dBiayaOps.value.toLocaleString('id-ID')})`],
-            ['Dikurangi: Biaya Bahan Baku', `(Rp ${dBiayaBahan.value.toLocaleString('id-ID')})`],
+            ['Dikurangi: Biaya Pemasaran', `(Rp ${dBiayaPemasaran.value.toLocaleString('id-ID')})`],
+            ['Dikurangi: Biaya Admin', `(Rp ${dBiayaAdmin.value.toLocaleString('id-ID')})`],
+            ['Dikurangi: Biaya Sewa', `(Rp ${dBiayaSewa.value.toLocaleString('id-ID')})`],
             ['', ''],
             ['LABA / RUGI BERSIH', `Rp ${labaBersih.value.toLocaleString('id-ID')}`]
         ],
         theme: 'grid',
         styles: { fontSize: 12 },
         willDrawCell: function (data) {
-            if (data.row.index === 7) { // Baris Laba Bersih
+            if (data.row.index === 8) { // Baris Laba Bersih
                 doc.setFont(undefined, 'bold');
                 doc.setTextColor(labaBersih.value >= 0 ? 0 : 255, labaBersih.value >= 0 ? 128 : 0, 0);
             }

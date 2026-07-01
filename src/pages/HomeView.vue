@@ -67,7 +67,7 @@
                                 class="text-base font-semibold text-slate-800 group-hover:text-rose-700 transition-colors">
                                 Input Biaya
                             </h3>
-                            <p class="text-sm text-slate-500 mt-0.5">Operasional & Bahan Baku</p>
+                            <p class="text-sm text-slate-500 mt-0.5">Biaya Pemasaran, Admin, Sewa</p>
                         </div>
                     </button>
 
@@ -83,9 +83,9 @@
                         <div class="ml-4">
                             <h3
                                 class="text-base font-semibold text-slate-800 group-hover:text-teal-700 transition-colors">
-                                Cek Produk
+                                Scan Produk
                             </h3>
-                            <p class="text-sm text-slate-500 mt-0.5">Pemindaian barcode data</p>
+                            <p class="text-sm text-slate-500 mt-0.5">Scan Barcode produk untuk proses penjualan</p>
                         </div>
                     </button>
 

@@ -21,8 +21,9 @@
                         class="w-full p-2.5 text-slate-800 bg-white border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-shadow"
                         required>
                         <option value="" disabled selected>Pilih Kategori...</option>
-                        <option value="operasional">Biaya Operasional</option>
-                        <option value="bahan_baku">Biaya Bahan Baku</option>
+                        <option value="pemasaran">Biaya Pemasaran</option>
+                        <option value="admin">Biaya Admin</option>
+                        <option value="sewa">Biaya Sewa</option>
                     </select>
                 </div>
 
@@ -84,7 +85,7 @@ import { db } from '../database/db';
 import dayjs from 'dayjs';
 
 const form = ref({
-    jenis: 'operasional',
+    jenis: '',
     nominal: '',
     bulanTahun: dayjs().format('YYYY-MM'),
     keterangan: ''

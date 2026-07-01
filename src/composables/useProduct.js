@@ -7,7 +7,7 @@ export function useProducts() {
     // Fungsi untuk mengambil semua data dari tabel 'produk'
     const loadProducts = async () => {
         try {
-            productList.value = await db.produk.toArray();
+            productList.value = await db.produk.orderBy('timestamp').reverse().toArray();
         } catch (error) {
             console.error('Gagal memuat data:', error);
         }
@@ -43,5 +43,18 @@ export function useProducts() {
         }
     };
 
-    return { productList, loadProducts, getProduct, addProduct, deleteProduct };
+    // Fungsi untuk mengurangi stok saat penjualan selesai
+    const decreaseProductStock = async (id, qtySold) => {
+        try {
+            const product = await db.produk.get(id);
+            if (product && product.quantity !== undefined) {
+                const newQty = Math.max(0, product.quantity - qtySold);
+                await db.produk.update(id, { quantity: newQty });
+            }
+        } catch (error) {
+            console.error('Gagal mengupdate stok produk:', error);
+        }
+    };
+
+    return { productList, loadProducts, getProduct, addProduct, deleteProduct, decreaseProductStock };
 }
