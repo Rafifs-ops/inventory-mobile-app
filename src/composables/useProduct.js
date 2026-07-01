@@ -7,7 +7,7 @@ export function useProducts() {
     // Fungsi untuk mengambil semua data dari tabel 'produk'
     const loadProducts = async () => {
         try {
-            productList.value = await db.produk.orderBy('timestamp').reverse().toArray();
+            productList.value = await db.produk.orderBy('createdAt').reverse().toArray();
         } catch (error) {
             console.error('Gagal memuat data:', error);
         }

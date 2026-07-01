@@ -1,82 +1,99 @@
 <template>
-    <div class="min-h-screen bg-gray-50 text-slate-800 p-6 flex flex-col items-center py-12">
+    <div class="min-h-screen bg-white sm:bg-slate-50 text-slate-900 flex flex-col sm:items-center sm:py-12">
 
-        <div class="w-full max-w-lg mb-6 text-center">
-            <h2 class="text-2xl font-bold text-slate-800 tracking-tight">Kalkulator HPP</h2>
-            <p class="text-sm text-slate-500 mt-1">Hitung Harga Pokok Penjualan dan simulasi margin keuntungan</p>
-        </div>
+        <div
+            class="w-full sm:max-w-lg bg-white sm:border sm:border-slate-200 sm:shadow-sm sm:rounded-2xl flex-grow sm:flex-grow-0 flex flex-col">
 
-        <div class="w-full max-w-lg bg-white border border-gray-200 shadow-sm rounded-xl overflow-hidden p-6 space-y-6">
-
-            <div class="space-y-4">
-                <div>
-                    <label class="block mb-1.5 text-sm font-medium text-slate-700">Total Biaya Operasional</label>
-                    <div class="relative">
-                        <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                            <span class="text-slate-500 sm:text-sm">Rp</span>
-                        </div>
-                        <input v-model="ops" type="number" min="0" placeholder="0"
-                            class="w-full p-2.5 pl-10 text-slate-800 bg-white border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-shadow">
-                    </div>
-                </div>
-
-                <div>
-                    <label class="block mb-1.5 text-sm font-medium text-slate-700">Total Biaya Bahan Baku</label>
-                    <div class="relative">
-                        <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                            <span class="text-slate-500 sm:text-sm">Rp</span>
-                        </div>
-                        <input v-model="bahan" type="number" min="0" placeholder="0"
-                            class="w-full p-2.5 pl-10 text-slate-800 bg-white border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-shadow">
-                    </div>
-                </div>
-
-                <div>
-                    <label class="block mb-1.5 text-sm font-medium text-slate-700">Jumlah Produk Dihasilkan</label>
-                    <div class="relative">
-                        <input v-model="qty" type="number" min="0" placeholder="0"
-                            class="w-full p-2.5 pr-12 text-slate-800 bg-white border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-shadow">
-                        <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-                            <span class="text-slate-500 sm:text-sm">Unit</span>
-                        </div>
-                    </div>
-                </div>
+            <div
+                class="px-5 pt-8 pb-6 sm:px-6 sm:pt-6 sm:pb-4 border-b border-slate-100 sm:border-none text-center sm:text-left">
+                <h2 class="text-2xl font-bold text-slate-900 tracking-tight">Kalkulator HPP</h2>
+                <p class="text-sm text-slate-500 mt-1.5 leading-relaxed">
+                    Hitung Harga Pokok Penjualan dan simulasi margin keuntungan
+                </p>
             </div>
 
-            <div class="bg-slate-50 border border-slate-200 rounded-lg p-4 flex justify-between items-center">
-                <span class="text-sm font-medium text-slate-600">Hasil HPP per Unit</span>
-                <span class="text-xl font-bold text-slate-800">Rp {{ hasilHpp.toLocaleString('id-ID') }}</span>
-            </div>
+            <div class="px-5 py-6 sm:px-6 space-y-6 flex-grow">
 
-            <div class="border-t border-gray-100"></div>
+                <div class="space-y-5 sm:space-y-4">
+                    <div>
+                        <label class="block mb-2 sm:mb-1.5 text-sm font-semibold text-slate-700">Total Biaya
+                            Operasional</label>
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 flex items-center pl-4 sm:pl-3 pointer-events-none">
+                                <span class="text-slate-500 text-base sm:text-sm font-medium">Rp</span>
+                            </div>
+                            <input v-model="ops" type="number" min="0" placeholder="0"
+                                class="w-full pl-12 sm:pl-10 pr-4 py-3 sm:py-2.5 text-base sm:text-sm text-slate-900 bg-slate-50 border border-slate-300 rounded-xl sm:rounded-lg focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-blue-600 transition-colors">
+                        </div>
+                    </div>
 
-            <div class="space-y-4">
-                <div>
-                    <label class="block mb-1.5 text-sm font-medium text-slate-700">Target Keuntungan</label>
-                    <div class="relative w-full sm:w-1/2">
-                        <input v-model="margin" type="number" min="0" placeholder="0"
-                            class="w-full p-2.5 pr-8 text-slate-800 bg-white border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-shadow">
-                        <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-                            <span class="text-slate-500 sm:text-sm">%</span>
+                    <div>
+                        <label class="block mb-2 sm:mb-1.5 text-sm font-semibold text-slate-700">Total Biaya Bahan
+                            Baku</label>
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 flex items-center pl-4 sm:pl-3 pointer-events-none">
+                                <span class="text-slate-500 text-base sm:text-sm font-medium">Rp</span>
+                            </div>
+                            <input v-model="bahan" type="number" min="0" placeholder="0"
+                                class="w-full pl-12 sm:pl-10 pr-4 py-3 sm:py-2.5 text-base sm:text-sm text-slate-900 bg-slate-50 border border-slate-300 rounded-xl sm:rounded-lg focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-blue-600 transition-colors">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block mb-2 sm:mb-1.5 text-sm font-semibold text-slate-700">Jumlah Produk
+                            Dihasilkan</label>
+                        <div class="relative">
+                            <input v-model="qty" type="number" min="0" placeholder="0"
+                                class="w-full pl-4 pr-16 sm:pr-12 py-3 sm:py-2.5 text-base sm:text-sm text-slate-900 bg-slate-50 border border-slate-300 rounded-xl sm:rounded-lg focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-blue-600 transition-colors">
+                            <div class="absolute inset-y-0 right-0 flex items-center pr-4 sm:pr-3 pointer-events-none">
+                                <span class="text-slate-500 text-base sm:text-sm font-medium">Unit</span>
+                            </div>
                         </div>
                     </div>
                 </div>
 
                 <div
-                    class="bg-emerald-50 border border-emerald-200 rounded-lg p-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
-                    <span class="text-sm font-medium text-emerald-800">Rekomendasi Harga Jual</span>
-                    <span class="text-2xl font-bold text-emerald-600">Rp {{ hargaJual.toLocaleString('id-ID') }}</span>
+                    class="bg-slate-50 border border-slate-200 rounded-xl sm:rounded-lg p-5 sm:p-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
+                    <span class="text-sm font-semibold text-slate-600">Hasil HPP per Unit</span>
+                    <span class="text-2xl sm:text-xl font-bold text-slate-900 tracking-tight">Rp {{
+                        hasilHpp.toLocaleString('id-ID') }}</span>
+                </div>
+
+                <div class="border-t border-slate-100"></div>
+
+                <div class="space-y-5 sm:space-y-4">
+                    <div>
+                        <label class="block mb-2 sm:mb-1.5 text-sm font-semibold text-slate-700">Target
+                            Keuntungan</label>
+                        <div class="relative w-full sm:w-1/2">
+                            <input v-model="margin" type="number" min="0" placeholder="0"
+                                class="w-full pl-4 pr-12 sm:pr-8 py-3 sm:py-2.5 text-base sm:text-sm text-slate-900 bg-slate-50 border border-slate-300 rounded-xl sm:rounded-lg focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-blue-600 transition-colors">
+                            <div class="absolute inset-y-0 right-0 flex items-center pr-4 sm:pr-3 pointer-events-none">
+                                <span class="text-slate-500 text-base sm:text-sm font-medium">%</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div
+                        class="bg-emerald-50/80 sm:bg-emerald-50 border border-emerald-200 rounded-xl sm:rounded-lg p-5 sm:p-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
+                        <span class="text-sm font-bold text-emerald-800">Rekomendasi Harga Jual</span>
+                        <span class="text-3xl sm:text-2xl font-bold text-emerald-600 tracking-tight">Rp {{
+                            hargaJual.toLocaleString('id-ID') }}</span>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <RouterLink to="/"
-            class="mt-6 flex items-center justify-center text-sm font-medium text-slate-500 hover:text-blue-600 transition-colors">
-            <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-            </svg>
-            Kembali ke Menu Utama
-        </RouterLink>
+        <div class="py-6 sm:py-0 sm:mt-6 w-full sm:max-w-lg flex justify-center bg-slate-50 sm:bg-transparent">
+            <RouterLink to="/"
+                class="flex items-center px-4 py-2 text-sm font-medium text-slate-500 hover:text-slate-800 transition-colors rounded-lg">
+                <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                </svg>
+                Kembali ke Menu Utama
+            </RouterLink>
+        </div>
 
     </div>
 </template>
