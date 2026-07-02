@@ -66,7 +66,7 @@
                             <p class="text-xs font-bold text-orange-600 uppercase mb-1.5 tracking-wide">Biaya Pemasaran
                             </p>
                             <p class="text-lg font-bold text-orange-700">Rp {{ dBiayaPemasaran.toLocaleString('id-ID')
-                            }}</p>
+                                }}</p>
                         </div>
                         <div
                             class="p-4 bg-purple-50/50 sm:bg-purple-50 rounded-xl border border-purple-100 flex flex-col justify-center">
@@ -216,16 +216,20 @@ const hitungStatistikProduk = (penjualan) => {
     const rekap = {};
     penjualan.forEach(transaksi => {
         transaksi.items.forEach(produk => {
+
+            // Jika barang belum ada di data penjualan maka tambahkan
             if (!rekap[produk.id]) {
-                rekap[produk.id] = { nama: produk.nama, qty: 0 };
+                rekap[produk.id] = { nama: produk.nama, qty: produk.quantity };
             }
-            rekap[produk.id].qty += 1;
+
+            // Jika barang sudah ada maka tambahkan quantity-nya
+            rekap[produk.id].qty += produk.quantity;
         });
     });
 
     const arrRekap = Object.values(rekap).sort((a, b) => b.qty - a.qty);
-    produkTerlaris.value = arrRekap[0];
-    produkPalingSepi.value = arrRekap[arrRekap.length - 1];
+    produkTerlaris.value = arrRekap[0]; // ambil nilai paling awal dari urutan
+    produkPalingSepi.value = arrRekap[arrRekap.length - 1]; // ambil nilai paling akhir dari urutan
 };
 
 const eksporLabaRugi = async () => {

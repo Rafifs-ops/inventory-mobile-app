@@ -47,8 +47,23 @@
                             <span
                                 class="text-slate-500 text-xs font-semibold uppercase tracking-wider block mb-1 sm:mb-0.5">Stok
                                 Tersedia</span>
-                            <span class="font-bold text-blue-700 text-base sm:text-sm">{{ item.quantity || 0 }}
-                                Unit</span>
+                            <div class="flex items-center space-x-3 mt-1 sm:mt-0.5">
+                                <button @click="kurangiStok(item)"
+                                    class="w-7 h-7 flex items-center justify-center rounded-full bg-slate-100 text-slate-600 hover:bg-rose-100 hover:text-rose-600 transition-colors focus:outline-none focus:ring-2 focus:ring-rose-500 disabled:opacity-50 disabled:cursor-not-allowed"
+                                    :disabled="(item.quantity || 0) <= 0" title="Kurangi Stok">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4" />
+                                    </svg>
+                                </button>
+                                <span class="font-bold text-blue-700 text-base sm:text-sm min-w-[3.5rem] text-center">{{ item.quantity || 0 }}
+                                    Unit</span>
+                                <button @click="tambahStok(item)"
+                                    class="w-7 h-7 flex items-center justify-center rounded-full bg-slate-100 text-slate-600 hover:bg-blue-100 hover:text-blue-600 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500" title="Tambah Stok">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                                    </svg>
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -99,8 +114,20 @@
 import { onMounted } from 'vue';
 import { useProducts } from '../composables/useProduct';
 
-// Import deleteProduct dari composable
-const { productList, loadProducts, deleteProduct } = useProducts();
+// Import deleteProduct dan updateProductStock dari composable
+const { productList, loadProducts, deleteProduct, updateProductStock } = useProducts();
+
+const tambahStok = async (item) => {
+    const currentQty = item.quantity || 0;
+    await updateProductStock(item.id, currentQty + 1);
+};
+
+const kurangiStok = async (item) => {
+    const currentQty = item.quantity || 0;
+    if (currentQty > 0) {
+        await updateProductStock(item.id, currentQty - 1);
+    }
+};
 
 onMounted(async () => {
     await loadProducts();

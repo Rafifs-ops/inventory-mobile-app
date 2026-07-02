@@ -18,6 +18,15 @@ const router = createRouter({
     { path: '/biaya', name: 'biaya', component: BiayaView },
     { path: '/dashboard', name: 'dashboard', component: DashboardView }
   ],
+  scrollBehavior(to, from, savedPosition) {
+    // Kembali ke posisi scroll sebelumnya jika user menekan tombol Back/Forward di browser
+    if (savedPosition) {
+      return savedPosition
+    } else {
+      // Selalu scroll ke paling atas (x: 0, y: 0) saat pindah halaman
+      return { top: 0 }
+    }
+  }
 })
 
 export default router

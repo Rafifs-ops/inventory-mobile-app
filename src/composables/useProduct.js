@@ -56,5 +56,15 @@ export function useProducts() {
         }
     };
 
-    return { productList, loadProducts, getProduct, addProduct, deleteProduct, decreaseProductStock };
+    // Fungsi untuk mengubah stok secara langsung
+    const updateProductStock = async (id, newQty) => {
+        try {
+            await db.produk.update(id, { quantity: Math.max(0, newQty) });
+            await loadProducts(); // Refresh list setelah update
+        } catch (error) {
+            console.error('Gagal mengupdate stok produk:', error);
+        }
+    };
+
+    return { productList, loadProducts, getProduct, addProduct, deleteProduct, decreaseProductStock, updateProductStock };
 }
