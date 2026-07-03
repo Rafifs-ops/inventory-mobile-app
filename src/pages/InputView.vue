@@ -106,7 +106,7 @@ import { CapacitorBarcodeScanner } from '@capacitor/barcode-scanner';
 import { useProducts } from '../composables/useProduct';
 
 const route = useRoute();
-const { addProduct } = useProducts();
+const { addProduct, getProduct } = useProducts();
 
 const form = reactive({
     id: '',
@@ -150,6 +150,12 @@ const simpanProduk = async () => {
     }
 
     try {
+        const produkSudahAda = await getProduct(form.id);
+        if (produkSudahAda) {
+            alert(`Peringatan! Barcode ID ${form.id} sudah terdaftar atas nama "${produkSudahAda.nama}". Jika ingin menambah stok, silakan gunakan menu Daftar Inventaris.`);
+            return; // Hentikan eksekusi
+        }
+
         // Tambahkan await di sini
         await addProduct({
             id: form.id,

@@ -54,30 +54,74 @@
             </div>
 
             <div class="bg-white border border-slate-200 rounded-2xl sm:rounded-xl shadow-sm mb-6 overflow-hidden">
+                <div
+                    class="px-5 py-4 border-b border-slate-100 bg-slate-50 flex flex-col sm:flex-row sm:items-center justify-between">
+                    <h3 class="text-sm font-bold text-slate-800 uppercase tracking-wide">
+                        Perhitungan HPP (Cost of Goods Sold)
+                    </h3>
+                    <span class="text-xs font-semibold text-blue-600 bg-blue-50 px-2 py-1 rounded">
+                        Rp {{ totalHppBaru.toLocaleString('id-ID') }}
+                    </span>
+                </div>
+                <div class="p-5">
+                    <div class="grid grid-cols-1 sm:grid-cols-4 gap-4">
+                        <div class="p-4 bg-slate-50 rounded-xl border border-slate-100 flex flex-col justify-center">
+                            <p class="text-xs font-bold text-slate-500 uppercase mb-1.5 tracking-wide">Persediaan Awal
+                            </p>
+                            <p class="text-lg font-bold text-slate-700">Rp {{
+                                persediaanBulanLalu.toLocaleString('id-ID') }}</p>
+                            <p class="text-[10px] text-slate-400 mt-1">Bulan sebelumnya</p>
+                        </div>
+                        <div class="p-4 bg-slate-50 rounded-xl border border-slate-100 flex flex-col justify-center">
+                            <p class="text-xs font-bold text-slate-500 uppercase mb-1.5 tracking-wide">+ Bahan Baku</p>
+                            <p class="text-lg font-bold text-slate-700">Rp {{ dBiayaBahanBaku.toLocaleString('id-ID') }}
+                            </p>
+                        </div>
+                        <div class="p-4 bg-slate-50 rounded-xl border border-slate-100 flex flex-col justify-center">
+                            <p class="text-xs font-bold text-slate-500 uppercase mb-1.5 tracking-wide">+ Operasional</p>
+                            <p class="text-lg font-bold text-slate-700">Rp {{ dBiayaOperasional.toLocaleString('id-ID')
+                            }}</p>
+                        </div>
+                        <div class="p-4 bg-slate-50 rounded-xl border border-slate-100 flex flex-col justify-center">
+                            <p class="text-xs font-bold text-slate-500 uppercase mb-1.5 tracking-wide">- Persediaan
+                                Akhir</p>
+                            <p class="text-lg font-bold text-slate-700">Rp {{ persediaanSaatIni.toLocaleString('id-ID')
+                            }}</p>
+                            <p class="text-[10px] text-slate-400 mt-1">Saat ini (Bulan ini)</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white border border-slate-200 rounded-2xl sm:rounded-xl shadow-sm mb-6 overflow-hidden">
                 <div class="px-5 py-4 border-b border-slate-100 bg-slate-50">
                     <h3 class="text-sm font-bold text-slate-800 uppercase tracking-wide">
-                        Rincian Pengeluaran (Bulan Ini)
+                        Rincian Pengeluaran Lainnya (Bulan Ini)
                     </h3>
                 </div>
                 <div class="p-5">
-                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
                         <div
                             class="p-4 bg-orange-50/50 sm:bg-orange-50 rounded-xl border border-orange-100 flex flex-col justify-center">
-                            <p class="text-xs font-bold text-orange-600 uppercase mb-1.5 tracking-wide">Biaya Pemasaran
-                            </p>
+                            <p class="text-xs font-bold text-orange-600 uppercase mb-1.5 tracking-wide">Pemasaran</p>
                             <p class="text-lg font-bold text-orange-700">Rp {{ dBiayaPemasaran.toLocaleString('id-ID')
-                                }}</p>
+                            }}</p>
                         </div>
                         <div
                             class="p-4 bg-purple-50/50 sm:bg-purple-50 rounded-xl border border-purple-100 flex flex-col justify-center">
-                            <p class="text-xs font-bold text-purple-600 uppercase mb-1.5 tracking-wide">Biaya Admin</p>
+                            <p class="text-xs font-bold text-purple-600 uppercase mb-1.5 tracking-wide">Admin</p>
                             <p class="text-lg font-bold text-purple-700">Rp {{ dBiayaAdmin.toLocaleString('id-ID') }}
                             </p>
                         </div>
                         <div
                             class="p-4 bg-sky-50/50 sm:bg-sky-50 rounded-xl border border-sky-100 flex flex-col justify-center">
-                            <p class="text-xs font-bold text-sky-600 uppercase mb-1.5 tracking-wide">Biaya Sewa</p>
+                            <p class="text-xs font-bold text-sky-600 uppercase mb-1.5 tracking-wide">Sewa</p>
                             <p class="text-lg font-bold text-sky-700">Rp {{ dBiayaSewa.toLocaleString('id-ID') }}</p>
+                        </div>
+                        <div
+                            class="p-4 bg-slate-50/50 sm:bg-slate-50 rounded-xl border border-slate-200 flex flex-col justify-center">
+                            <p class="text-xs font-bold text-slate-600 uppercase mb-1.5 tracking-wide">Lain-lain</p>
+                            <p class="text-lg font-bold text-slate-700">Rp {{ dBiayaLain.toLocaleString('id-ID') }}</p>
                         </div>
                     </div>
                 </div>
@@ -171,10 +215,17 @@ const produkTerlaris = ref(null);
 const produkPalingSepi = ref(null);
 
 // Variabel untuk PDF
-const dTotalHpp = ref(0);
+const dTotalHpp = ref(0); // HPP kasir lama (opsional untuk perbandingan, tapi tidak dipakai di Laba Rugi lagi)
+const totalHppBaru = ref(0); // HPP rumus baru
 const dBiayaPemasaran = ref(0);
 const dBiayaAdmin = ref(0);
 const dBiayaSewa = ref(0);
+const dBiayaBahanBaku = ref(0);
+const dBiayaOperasional = ref(0);
+const dBiayaLain = ref(0);
+
+const persediaanBulanLalu = ref(0);
+const persediaanSaatIni = ref(0);
 
 const muatData = async () => {
     const bulanAwal = dayjs(filterBulan.value).startOf('month').format('YYYY-MM-DD HH:mm:ss');
@@ -190,17 +241,43 @@ const muatData = async () => {
         .where('bulanTahun').equals(filterBulan.value)
         .toArray();
 
-    // Kalkulasi Total Penjualan & HPP
-    totalJualBulanan.value = penjualanBulanIni.reduce((sum, item) => sum + item.totalPenjualan, 0);
-    dTotalHpp.value = penjualanBulanIni.reduce((sum, item) => sum + item.totalHpp, 0);
+    // Hitung Total Produk Saat Ini (Live)
+    const semuaProduk = await db.produk.toArray();
+    const liveTotalPersediaan = semuaProduk.reduce((sum, item) => sum + ((item.quantity || 0) * (item.hpp || 0)), 0);
+
+    // Update snapshot persediaan jika bulan yang difilter adalah bulan ini
+    const realCurrentMonth = dayjs().format('YYYY-MM');
+    if (filterBulan.value === realCurrentMonth) {
+        await db.persediaan.put({
+            bulanTahun: realCurrentMonth,
+            totalNilai: liveTotalPersediaan
+        });
+    }
+
+    // Ambil Snapshot Persediaan
+    const prevMonth = dayjs(filterBulan.value).subtract(1, 'month').format('YYYY-MM');
+    const snapshotBulanLalu = await db.persediaan.get(prevMonth);
+    const snapshotSaatIni = await db.persediaan.get(filterBulan.value);
+
+    persediaanBulanLalu.value = snapshotBulanLalu ? snapshotBulanLalu.totalNilai : 0;
+    persediaanSaatIni.value = snapshotSaatIni ? snapshotSaatIni.totalNilai : 0;
+
+    // Kalkulasi Total Penjualan
+    totalJualBulanan.value = penjualanBulanIni.reduce((sum, item) => sum + (Number(item.totalPenjualan) || 0), 0);
 
     // Kalkulasi Biaya
     dBiayaPemasaran.value = pengeluaranBulanIni.filter(p => p.jenis === 'pemasaran').reduce((sum, item) => sum + item.nominal, 0);
     dBiayaAdmin.value = pengeluaranBulanIni.filter(p => p.jenis === 'admin').reduce((sum, item) => sum + item.nominal, 0);
     dBiayaSewa.value = pengeluaranBulanIni.filter(p => p.jenis === 'sewa').reduce((sum, item) => sum + item.nominal, 0);
+    dBiayaBahanBaku.value = pengeluaranBulanIni.filter(p => p.jenis === 'bahan_baku').reduce((sum, item) => sum + item.nominal, 0);
+    dBiayaOperasional.value = pengeluaranBulanIni.filter(p => p.jenis === 'operasional').reduce((sum, item) => sum + item.nominal, 0);
+    dBiayaLain.value = pengeluaranBulanIni.filter(p => p.jenis === 'lain_lain').reduce((sum, item) => sum + item.nominal, 0);
 
-    // Rumus Laba Rugi: Penjualan - HPP Terjual - (Operasional + Pemasaran + Admin + Sewa)
-    labaBersih.value = totalJualBulanan.value - dTotalHpp.value - dBiayaPemasaran.value - dBiayaAdmin.value - dBiayaSewa.value;
+    // Hitung HPP dengan rumus baru
+    totalHppBaru.value = persediaanBulanLalu.value + (dBiayaBahanBaku.value + dBiayaOperasional.value) - persediaanSaatIni.value;
+
+    // Rumus Laba Rugi: Penjualan - HPP Baru - (Pengeluaran Lainnya)
+    labaBersih.value = totalJualBulanan.value - totalHppBaru.value - dBiayaPemasaran.value - dBiayaAdmin.value - dBiayaSewa.value - dBiayaLain.value;
 
     // Hitung Produk Terlaris / Sepi
     hitungStatistikProduk(penjualanBulanIni);
@@ -220,10 +297,10 @@ const hitungStatistikProduk = (penjualan) => {
             // Jika barang belum ada di data penjualan maka tambahkan
             if (!rekap[produk.id]) {
                 rekap[produk.id] = { nama: produk.nama, qty: produk.quantity };
+            } else {
+                // Jika barang sudah ada maka tambahkan quantity-nya
+                rekap[produk.id].qty += produk.quantity;
             }
-
-            // Jika barang sudah ada maka tambahkan quantity-nya
-            rekap[produk.id].qty += produk.quantity;
         });
     });
 
@@ -241,19 +318,20 @@ const eksporLabaRugi = async () => {
         startY: 30,
         body: [
             ['Total Pendapatan Penjualan', `Rp ${totalJualBulanan.value.toLocaleString('id-ID')}`],
-            ['Dikurangi: Total HPP Produk Terjual', `(Rp ${dTotalHpp.value.toLocaleString('id-ID')})`],
-            ['Laba Kotor', `Rp ${(totalJualBulanan.value - dTotalHpp.value).toLocaleString('id-ID')}`],
+            ['Dikurangi: HPP (Harga Pokok Penjualan)', `(Rp ${totalHppBaru.value.toLocaleString('id-ID')})`],
+            ['Laba Kotor', `Rp ${(totalJualBulanan.value - totalHppBaru.value).toLocaleString('id-ID')}`],
             ['', ''],
             ['Dikurangi: Biaya Pemasaran', `(Rp ${dBiayaPemasaran.value.toLocaleString('id-ID')})`],
             ['Dikurangi: Biaya Admin', `(Rp ${dBiayaAdmin.value.toLocaleString('id-ID')})`],
             ['Dikurangi: Biaya Sewa', `(Rp ${dBiayaSewa.value.toLocaleString('id-ID')})`],
+            ['Dikurangi: Biaya Lain-lain', `(Rp ${dBiayaLain.value.toLocaleString('id-ID')})`],
             ['', ''],
             ['LABA / RUGI BERSIH', `Rp ${labaBersih.value.toLocaleString('id-ID')}`]
         ],
         theme: 'grid',
         styles: { fontSize: 12 },
         willDrawCell: function (data) {
-            if (data.row.index === 8) { // Baris Laba Bersih
+            if (data.row.index === 9) { // Baris Laba Bersih
                 doc.setFont(undefined, 'bold');
                 doc.setTextColor(labaBersih.value >= 0 ? 0 : 255, labaBersih.value >= 0 ? 128 : 0, 0);
             }

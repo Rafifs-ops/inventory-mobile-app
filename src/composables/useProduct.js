@@ -1,8 +1,9 @@
 import { ref } from 'vue';
 import { db } from '../database/db'; // Sesuaikan path dengan lokasi file db.js Anda
 
+const productList = ref([]);
+
 export function useProducts() {
-    const productList = ref([]);
 
     // Fungsi untuk mengambil semua data dari tabel 'produk'
     const loadProducts = async () => {
@@ -66,5 +67,15 @@ export function useProducts() {
         }
     };
 
-    return { productList, loadProducts, getProduct, addProduct, deleteProduct, decreaseProductStock, updateProductStock };
+    // Fungsi untuk mengubah detail produk (nama, harga, hpp)
+    const updateProductDetails = async (id, updatedData) => {
+        try {
+            await db.produk.update(id, updatedData);
+            await loadProducts();
+        } catch (error) {
+            console.error('Gagal mengupdate detail produk:', error);
+        }
+    };
+
+    return { productList, loadProducts, getProduct, addProduct, deleteProduct, decreaseProductStock, updateProductStock, updateProductDetails };
 }

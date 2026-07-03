@@ -47,7 +47,7 @@
                 </div>
 
                 <div class="space-y-3 sm:space-y-2.5">
-                    <div v-for="produk in barangDitemukan" :key="produk.id"
+                    <div v-for="(produk, index) in barangDitemukan" :key="index"
                         class="p-4 sm:p-5 bg-white border border-slate-200 rounded-2xl sm:rounded-xl shadow-sm hover:border-blue-300 transition-colors">
 
                         <div class="flex justify-between items-start gap-4">
@@ -55,7 +55,8 @@
                                 <div class="flex items-center flex-wrap gap-2 mb-1.5">
                                     <h4 class="text-base font-bold text-slate-900 leading-tight">
                                         {{ produk.nama }}
-                                        <span class="text-sm font-semibold text-blue-600 ml-1">x{{ produk.qty }}</span>
+                                        <span class="text-sm font-semibold text-blue-600 ml-1">x{{ produk.quantity
+                                        }}</span>
                                     </h4>
                                     <span
                                         class="px-2 py-0.5 text-[10px] font-bold text-emerald-700 bg-emerald-100 rounded-md uppercase tracking-wider">
@@ -63,7 +64,7 @@
                                     </span>
                                 </div>
                                 <p class="text-sm font-bold text-slate-700">
-                                    Rp {{ (produk.harga * produk.qty).toLocaleString('id-ID') }}
+                                    Rp {{ (produk.harga * produk.quantity).toLocaleString('id-ID') }}
                                     <span class="text-xs text-slate-500 font-medium ml-1">
                                         (@Rp {{ produk.harga.toLocaleString('id-ID') }})
                                     </span>
@@ -73,26 +74,30 @@
 
                         <div
                             class="mt-3 sm:mt-4 pt-3 sm:pt-4 border-t border-slate-100 flex justify-between items-center text-xs">
-                            <span
-                                class="text-slate-500 font-mono font-medium bg-slate-50 px-2 py-1 rounded-md border border-slate-200">
-                                ID: {{ produk.id }}
-                            </span>
+                            <div class="flex gap-2">
+                                <span
+                                    class="text-slate-500 font-mono font-medium bg-slate-50 px-2 py-1 rounded-md border border-slate-200">
+                                    ID: {{ produk.id }}
+                                </span>
+                                <button @click="hapusItem(index)"
+                                    class="text-rose-600 bg-rose-50 px-2 py-1 rounded-md font-bold hover:bg-rose-100 mr-2">
+                                    Batal
+                                </button>
+                            </div>
+
                             <span
                                 class="font-bold text-emerald-600 flex items-center gap-1.5 bg-emerald-50/50 px-2 py-1 rounded-md">
-                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
-                                </svg>
-                                Margin Rp {{ ((produk.harga - (produk.hpp || 0)) * produk.qty).toLocaleString('id-ID')
+                                Margin Rp {{ (((produk.harga - (produk.hpp || 0)) *
+                                    produk.quantity)).toLocaleString('id-ID')
                                 }}
                             </span>
                         </div>
                     </div>
                 </div>
 
-                <button @click="prosesPenjualan"
+                <button @click="prosesPenjualan" :disabled="isProcessing"
                     class="w-full py-4 sm:py-3.5 mt-6 text-base sm:text-sm font-bold text-white transition-all bg-emerald-600 border border-transparent rounded-2xl sm:rounded-xl shadow-md hover:bg-emerald-700 hover:shadow-lg active:bg-emerald-800 active:scale-[0.99] focus:outline-none focus:ring-2 focus:ring-emerald-600 focus:ring-offset-2">
-                    Selesai Transaksi & Cetak Nota
+                    {{ isProcessing ? 'Memproses...' : 'Selesai Transaksi' }}
                 </button>
             </div>
 
@@ -114,20 +119,19 @@
 
 <script setup>
 import { ref } from 'vue';
-import { useRouter } from 'vue-router';
+import { onBeforeRouteLeave } from 'vue-router';
 import { CapacitorBarcodeScanner } from '@capacitor/barcode-scanner';
 import { useProducts } from '../composables/useProduct';
 import { db } from '../database/db';
 import dayjs from 'dayjs';
-import jsPDF from 'jspdf';
-import 'jspdf-autotable';
-import autoTable from 'jspdf-autotable';
-import { saveAndSharePDF } from '../utils/pdfHandler';
+import { useRouter } from 'vue-router';
 
 const router = useRouter();
 const { getProduct, decreaseProductStock } = useProducts();
+const isProcessing = ref(false);
 
 const barangDitemukan = ref([]);
+
 const totalPenjualan = ref(0);
 const totalKeuntungan = ref(0);
 const totalHppKasir = ref(0); // Tambahan untuk melacak HPP transaksi
@@ -144,10 +148,20 @@ const mulaiScan = async () => {
 
             if (produk) {
                 const existingItemIndex = barangDitemukan.value.findIndex(item => item.id === produk.id);
+
+                // Cek jumlah barang yang sudah ada di keranjang
+                const qtyDiKeranjang = existingItemIndex !== -1 ? barangDitemukan.value[existingItemIndex].quantity : 0;
+
+                // VALIDASI STOK
+                if (qtyDiKeranjang >= produk.quantity) {
+                    alert(`Stok "${produk.nama}" tidak mencukupi! Sisa stok sistem: ${produk.quantity}`);
+                    return; // Hentikan proses jika stok habis
+                }
+
                 if (existingItemIndex !== -1) {
-                    barangDitemukan.value[existingItemIndex].qty += 1;
+                    barangDitemukan.value[existingItemIndex].quantity += 1;
                 } else {
-                    produk.qty = 1;
+                    produk.quantity = 1; // inject quantity dari database menjadi quantity nota penjualan
                     barangDitemukan.value.push(produk);
                 }
 
@@ -166,60 +180,32 @@ const mulaiScan = async () => {
 
 const prosesPenjualan = async () => {
     if (barangDitemukan.value.length === 0) return;
-
+    isProcessing.value = true;
     const tanggal = dayjs().format('YYYY-MM-DD HH:mm:ss');
 
     // 1. Simpan ke database
     try {
-        await db.penjualan.add({
+        const idTransaksi = await db.penjualan.add({
             tanggal: tanggal,
             totalPenjualan: totalPenjualan.value,
             totalHpp: totalHppKasir.value,
             items: JSON.parse(JSON.stringify(barangDitemukan.value)) // Clone array
         });
 
-        // 2. Buat Nota PDF
-        await cetakNota(tanggal);
+        // 2. Kurangi stok produk
+        const updateStokPromises = barangDitemukan.value.map(item =>
+            decreaseProductStock(item.id, item.quantity)
+        );
+        await Promise.all(updateStokPromises);
 
-        // 3. Kurangi stok produk
-        for (const item of barangDitemukan.value) {
-            await decreaseProductStock(item.id, item.qty);
-        }
-
-        // 4. Reset kasir
+        // 3. Reset kasir dan alihkan ke halaman Receipt
         resetTotal();
-        alert('Penjualan berhasil dicatat dan nota siap!');
+        router.push({ path: '/receipt', query: { id: idTransaksi } });
     } catch (error) {
         console.error('Gagal menyimpan penjualan:', error);
         alert('Terjadi kesalahan saat memproses penjualan.' + ' ' + error);
+        isProcessing.value = false;
     }
-};
-
-const cetakNota = async (tanggal) => {
-    const doc = new jsPDF();
-    doc.setFontSize(18);
-    doc.text("Nota Penjualan - Smart Inventory", 14, 22);
-
-    doc.setFontSize(11);
-    doc.text(`Tanggal: ${tanggal}`, 14, 30);
-
-    const tableData = barangDitemukan.value.map((p, index) => [
-        index + 1,
-        p.nama,
-        p.qty,
-        `Rp ${Number(p.harga).toLocaleString('id-ID')}`,
-        `Rp ${(Number(p.harga) * p.qty).toLocaleString('id-ID')}`
-    ]);
-
-    autoTable(doc, {
-        startY: 35,
-        head: [['No', 'Nama Produk', 'Qty', 'Harga', 'Subtotal']],
-        body: tableData,
-        foot: [['', 'TOTAL', '', '', `Rp ${totalPenjualan.value.toLocaleString('id-ID')}`]],
-        theme: 'striped'
-    });
-
-    await saveAndSharePDF(doc, `Nota_${dayjs().format('YYYYMMDD_HHmmss')}.pdf`);
 };
 
 const resetTotal = () => {
@@ -228,4 +214,32 @@ const resetTotal = () => {
     totalHppKasir.value = 0;
     barangDitemukan.value = [];
 };
+
+const hapusItem = (index) => {
+    const item = barangDitemukan.value[index];
+    const modalHpp = Number(item.hpp) || 0;
+
+    // Kurangi kalkulasi total
+    totalPenjualan.value -= (item.harga * item.quantity);
+    totalKeuntungan.value -= ((item.harga - modalHpp) * item.quantity);
+    totalHppKasir.value -= (modalHpp * item.quantity);
+
+    // Hapus dari keranjang
+    barangDitemukan.value.splice(index, 1);
+};
+
+onBeforeRouteLeave((to, from, next) => {
+    if (barangDitemukan.value.length > 0) {
+        const konfirmasi = window.confirm(
+            'Ada transaksi kasir yang belum diselesaikan! Apakah Anda yakin ingin keluar? Semua daftar belanja di keranjang akan terhapus.'
+        );
+        if (konfirmasi) {
+            next(); // Izinkan pindah halaman
+        } else {
+            next(false); // Batalkan perpindahan halaman
+        }
+    } else {
+        next(); // Langsung pindah jika keranjang kosong
+    }
+});
 </script>

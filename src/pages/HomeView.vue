@@ -127,6 +127,23 @@
                         </div>
                     </button>
 
+                    <button @click="navigasiKe('/history')"
+                        class="group flex items-center p-4 bg-white border border-slate-200 rounded-xl hover:bg-slate-50 hover:border-amber-300 hover:shadow-md active:bg-slate-100 transition-all text-left shadow-sm sm:shadow-none">
+                        <div
+                            class="flex items-center justify-center w-14 h-14 sm:w-12 sm:h-12 bg-amber-50 text-amber-700 rounded-xl shrink-0 group-hover:scale-105 transition-transform">
+                            <svg class="w-7 h-7 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
+                            </svg>
+                        </div>
+                        <div class="ml-4">
+                            <h3
+                                class="text-base sm:text-lg font-bold text-slate-800 group-hover:text-amber-700 transition-colors tracking-tight">
+                                Riwayat Penjualan
+                            </h3>
+                            <p class="text-sm text-slate-500 mt-0.5 font-medium">Histori nota & transaksi</p>
+                        </div>
+                    </button>
+
                 </div>
             </div>
         </div>
