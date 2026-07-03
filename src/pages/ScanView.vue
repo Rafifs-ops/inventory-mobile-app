@@ -204,7 +204,8 @@ const prosesPenjualan = async () => {
     } catch (error) {
         console.error('Gagal menyimpan penjualan:', error);
         alert('Terjadi kesalahan saat memproses penjualan.' + ' ' + error);
-        isProcessing.value = false;
+    } finally {
+        isProcessing.value = false; // <-- Pindahkan ke blok finally
     }
 };
 

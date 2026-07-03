@@ -17,25 +17,25 @@
                 <div class="space-y-5 sm:space-y-4">
                     <div>
                         <label class="block mb-2 sm:mb-1.5 text-sm font-semibold text-slate-700">Total Biaya
-                            Operasional</label>
+                            Operasional (Bulan Ini)</label>
                         <div class="relative">
                             <div class="absolute inset-y-0 left-0 flex items-center pl-4 sm:pl-3 pointer-events-none">
                                 <span class="text-slate-500 text-base sm:text-sm font-medium">Rp</span>
                             </div>
-                            <input v-model="ops" type="number" min="0" placeholder="0"
-                                class="w-full pl-12 sm:pl-10 pr-4 py-3 sm:py-2.5 text-base sm:text-sm text-slate-900 bg-slate-50 border border-slate-300 rounded-xl sm:rounded-lg focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-blue-600 transition-colors">
+                            <input v-model="ops" type="number" min="0" placeholder="0" disabled
+                                class="w-full pl-12 sm:pl-10 pr-4 py-3 sm:py-2.5 text-base sm:text-sm text-slate-500 bg-slate-100 border border-slate-300 rounded-xl sm:rounded-lg cursor-not-allowed">
                         </div>
                     </div>
 
                     <div>
                         <label class="block mb-2 sm:mb-1.5 text-sm font-semibold text-slate-700">Total Biaya Bahan
-                            Baku</label>
+                            Baku (Bulan Ini)</label>
                         <div class="relative">
                             <div class="absolute inset-y-0 left-0 flex items-center pl-4 sm:pl-3 pointer-events-none">
                                 <span class="text-slate-500 text-base sm:text-sm font-medium">Rp</span>
                             </div>
-                            <input v-model="bahan" type="number" min="0" placeholder="0"
-                                class="w-full pl-12 sm:pl-10 pr-4 py-3 sm:py-2.5 text-base sm:text-sm text-slate-900 bg-slate-50 border border-slate-300 rounded-xl sm:rounded-lg focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-blue-600 transition-colors">
+                            <input v-model="bahan" type="number" min="0" placeholder="0" disabled
+                                class="w-full pl-12 sm:pl-10 pr-4 py-3 sm:py-2.5 text-base sm:text-sm text-slate-500 bg-slate-100 border border-slate-300 rounded-xl sm:rounded-lg cursor-not-allowed">
                         </div>
                     </div>
 
@@ -99,12 +99,33 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted } from 'vue';
+import { db } from '../database/db';
+import dayjs from 'dayjs';
 
 const ops = ref(0);
 const bahan = ref(0);
 const qty = ref(1);
 const margin = ref(0);
+
+const muatDataBiaya = async () => {
+    const bulanIni = dayjs().format('YYYY-MM');
+    const pengeluaranBulanIni = await db.pengeluaran
+        .where('bulanTahun').equals(bulanIni)
+        .toArray();
+
+    ops.value = pengeluaranBulanIni
+        .filter(p => p.jenis === 'operasional')
+        .reduce((sum, item) => sum + item.nominal, 0);
+
+    bahan.value = pengeluaranBulanIni
+        .filter(p => p.jenis === 'bahan_baku')
+        .reduce((sum, item) => sum + item.nominal, 0);
+};
+
+onMounted(() => {
+    muatDataBiaya();
+});
 
 const hasilHpp = computed(() => {
     if (qty.value <= 0) return 0;
