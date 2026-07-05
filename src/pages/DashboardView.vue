@@ -91,26 +91,8 @@
             </div>
 
             <div class="bg-white border border-slate-200 rounded-2xl sm:rounded-xl shadow-sm mb-6 overflow-hidden">
-                <div
-                    class="px-5 py-4 border-b border-slate-100 bg-slate-50 flex flex-col sm:flex-row sm:items-center justify-between">
-                    <h3 class="text-sm font-bold text-slate-800 uppercase tracking-wide">
-                        Biaya Pokok Produksi
-                    </h3>
-                </div>
                 <div class="p-5">
                     <div class="grid grid-cols-1 sm:grid-cols-4 gap-4">
-                        <div class="p-4 bg-slate-50 rounded-xl border border-slate-100 flex flex-col justify-center">
-                            <p class="text-xs font-bold text-slate-500 uppercase mb-1.5 tracking-wide">Bahan Baku atau
-                                Produk</p>
-                            <p class="text-lg font-bold text-slate-700">Rp {{ dBiayaBahanBaku.toLocaleString('id-ID') }}
-                            </p>
-                        </div>
-                        <div class="p-4 bg-slate-50 rounded-xl border border-slate-100 flex flex-col justify-center">
-                            <p class="text-xs font-bold text-slate-500 uppercase mb-1.5 tracking-wide">Operasional
-                                Beli atau Buat Produk</p>
-                            <p class="text-lg font-bold text-slate-700">Rp {{ dBiayaOperasional.toLocaleString('id-ID')
-                                }}</p>
-                        </div>
                         <div class="p-4 bg-slate-50 rounded-xl border border-slate-100 flex flex-col justify-center">
                             <p class="text-xs font-bold text-slate-500 uppercase mb-1.5 tracking-wide">Persediaan
                                 Saat ini</p>
@@ -214,8 +196,6 @@ const totalHppBaru = ref(0);
 const dBiayaPemasaran = ref(0);
 const dBiayaAdmin = ref(0);
 const dBiayaSewa = ref(0);
-const dBiayaBahanBaku = ref(0);
-const dBiayaOperasional = ref(0);
 const dBiayaLain = ref(0);
 
 const persediaanSaatIni = ref(0);
@@ -245,8 +225,6 @@ const muatData = async () => {
     dBiayaPemasaran.value = pengeluaranBulanIni.filter(p => p.jenis === 'pemasaran').reduce((sum, item) => sum + item.nominal, 0);
     dBiayaAdmin.value = pengeluaranBulanIni.filter(p => p.jenis === 'admin').reduce((sum, item) => sum + item.nominal, 0);
     dBiayaSewa.value = pengeluaranBulanIni.filter(p => p.jenis === 'sewa').reduce((sum, item) => sum + item.nominal, 0);
-    dBiayaBahanBaku.value = pengeluaranBulanIni.filter(p => p.jenis === 'bahan_baku').reduce((sum, item) => sum + item.nominal, 0);
-    dBiayaOperasional.value = pengeluaranBulanIni.filter(p => p.jenis === 'operasional').reduce((sum, item) => sum + item.nominal, 0);
     dBiayaLain.value = pengeluaranBulanIni.filter(p => p.jenis === 'lain_lain').reduce((sum, item) => sum + item.nominal, 0);
 
     // Hitung HPP dengan rumus baru

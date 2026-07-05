@@ -23,8 +23,6 @@
                         class="w-full px-4 py-3 sm:py-2.5 text-base sm:text-sm text-slate-900 bg-slate-50 border border-slate-300 rounded-xl sm:rounded-lg focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-blue-600 transition-colors appearance-none"
                         required>
                         <option value="" disabled selected>Pilih Kategori...</option>
-                        <option value="bahan_baku">Biaya Bahan Baku (HPP)</option>
-                        <option value="operasional">Biaya Operasional (HPP)</option>
                         <option value="pemasaran">Biaya Pemasaran</option>
                         <option value="admin">Biaya Admin</option>
                         <option value="sewa">Biaya Sewa</option>

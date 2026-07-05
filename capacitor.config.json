@@ -1,5 +1,5 @@
 {
-  "appId": "com.apps.inventory",
-  "appName": "InventoryApp",
+  "appId": "com.apps.smartpos",
+  "appName": "SmartPOS",
   "webDir": "dist"
 }
