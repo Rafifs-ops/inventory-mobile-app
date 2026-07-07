@@ -38,7 +38,7 @@
                             <span
                                 class="text-slate-500 text-xs font-semibold uppercase tracking-wider block mb-1 sm:mb-0.5">HPP</span>
                             <span class="font-bold text-slate-800">Rp {{ (item.hpp || 0).toLocaleString('id-ID')
-                            }}</span>
+                                }}</span>
                         </div>
 
                         <div class="hidden sm:block w-px h-8 bg-slate-200"></div>
@@ -166,7 +166,7 @@ import { onMounted, ref } from 'vue';
 import { useProducts } from '../composables/useProduct';
 
 // Import deleteProduct dan updateProductStock dari composable
-const { productList, loadProducts, deleteProduct, updateProductStock, updateProductDetails } = useProducts();
+const { productList, loadProducts, deleteProduct, ubahStokAman, updateProductDetails } = useProducts();
 
 const showEditModal = ref(false);
 const editForm = ref({ id: '', nama: '', harga: '', hpp: '' });
@@ -191,20 +191,12 @@ const simpanEdit = async () => {
 };
 
 const tambahStok = async (item) => {
-    // 1. Ubah angka di layar seketika (Optimistic Update)
-    item.quantity = (item.quantity || 0) + 1;
-
-    // 2. Simpan ke database di latar belakang
-    await updateProductStock(item.id, item.quantity);
+    await ubahStokAman(item.id, 1);
 };
 
 const kurangiStok = async (item) => {
     if ((item.quantity || 0) > 0) {
-        // 1. Ubah angka di layar seketika (Optimistic Update)
-        item.quantity -= 1;
-
-        // 2. Simpan ke database di latar belakang
-        await updateProductStock(item.id, item.quantity);
+        await ubahStokAman(item.id, -1);
     }
 };
 

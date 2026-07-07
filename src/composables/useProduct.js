@@ -69,11 +69,15 @@ export function useProducts() {
     };
 
     // Fungsi untuk mengubah stok secara langsung
-    const updateProductStock = async (id, newQty) => {
+    const ubahStokAman = async (id, penambahan) => {
         try {
-            await db.produk.update(id, { quantity: Math.max(0, newQty) });
-            await syncPersediaanSnapshot();
-            await loadProducts(); // Refresh list setelah update
+            const product = await db.produk.get(id);
+            if (product) {
+                const newQty = Math.max(0, (product.quantity || 0) + penambahan);
+                await db.produk.update(id, { quantity: newQty });
+                await syncPersediaanSnapshot();
+                await loadProducts(); // Refresh list agar UI terupdate
+            }
         } catch (error) {
             console.error('Gagal mengupdate stok produk:', error);
         }
@@ -90,5 +94,5 @@ export function useProducts() {
         }
     };
 
-    return { productList, loadProducts, getProduct, addProduct, deleteProduct, decreaseProductStock, updateProductStock, updateProductDetails };
+    return { productList, loadProducts, getProduct, addProduct, deleteProduct, decreaseProductStock, ubahStokAman, updateProductDetails };
 }

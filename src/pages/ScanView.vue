@@ -133,6 +133,7 @@ const { getProduct, decreaseProductStock } = useProducts();
 const isProcessing = ref(false);
 
 const barangDitemukan = ref([]);
+const qrCodeBase64 = ref('');
 
 const totalPenjualan = ref(0);
 const totalKeuntungan = ref(0);
@@ -185,25 +186,9 @@ const prosesPenjualan = async () => {
     isProcessing.value = true;
     const tanggal = dayjs().format('YYYY-MM-DD HH:mm:ss');
 
-    // 1. Simpan ke database
+    // Simpan ke database
     try {
-        const idTransaksi = await db.penjualan.add({
-            tanggal: tanggal,
-            totalPenjualan: totalPenjualan.value,
-            totalHpp: totalHppKasir.value,
-            items: JSON.parse(JSON.stringify(barangDitemukan.value)) // Clone array
-        });
-
-        // 2. Kurangi stok produk
-        const updateStokPromises = barangDitemukan.value.map(item =>
-            decreaseProductStock(item.id, item.quantity)
-        );
-        await Promise.all(updateStokPromises);
-
-        // 3. Reset kasir
-        resetTotal();
-
-        // 4. Generate JWT (Ganti 'RAHASIA_NOTA_ANDA' dengan kunci rahasia aplikasi Anda)
+        // 1. Generate JWT (Ganti 'RAHASIA_NOTA_ANDA' dengan kunci rahasia aplikasi Anda)
         const secret = new TextEncoder().encode('RAHASIA_NOTA_ANDA');
         const token = await new SignJWT({
             tanggal: tanggal,
@@ -216,15 +201,25 @@ const prosesPenjualan = async () => {
             // Opsional: .setExpirationTime('2h') jika nota ada masa kedaluwarsanya
             .sign(secret);
 
-        // 5. Buat URL Tujuan
-        const urlTujuan = `https://www.seenota.com?t=${token}`;
+        // 2. Simpan ke database (Tambahkan field tokenNota)
+        const idTransaksi = await db.penjualan.add({
+            tanggal: tanggal,
+            totalPenjualan: totalPenjualan.value,
+            totalHpp: totalHppKasir.value,
+            items: JSON.parse(JSON.stringify(barangDitemukan.value)),
+            tokenNota: token // <--- Simpan token di sini
+        });
 
-        // 6. Generate QR Code menjadi Base64 Image
-        // Margin diset agar QR Code terlihat rapi saat diprint
-        qrCodeBase64.value = await QRCode.toDataURL(urlTujuan, { margin: 2, width: 200 });
+        // 3. Kurangi stok produk
+        const updateStokPromises = barangDitemukan.value.map(item =>
+            decreaseProductStock(item.id, item.quantity)
+        );
+        await Promise.all(updateStokPromises);
 
-        // 7. Alihkan ke halaman Receipt
-        router.push({ path: '/receipt', query: { id: idTransaksi, qrCode: qrCodeBase64.value } });
+        // 4. Reset kasir
+        resetTotal();
+        // 5. Alihkan ke halaman Receipt
+        router.push({ path: '/receipt', query: { id: idTransaksi } });
     } catch (error) {
         console.error('Gagal menyimpan penjualan:', error);
         alert('Terjadi kesalahan saat memproses penjualan.' + ' ' + error);

@@ -36,7 +36,7 @@
                     </div>
 
                     <img :src="qrCodeBase64" alt="QR Code Nota"
-                        class="w-40 h-40 object-contain bg-white p-2 rounded-lg shadow-sm border border-slate-100 m-3" />
+                        class="w-40 h-40 object-contain bg-white p-2 rounded-lg shadow-sm border border-slate-100 my-3 mx-auto text-center" />
                 </div>
             </div>
 
@@ -74,17 +74,23 @@ import 'jspdf-autotable';
 import autoTable from 'jspdf-autotable';
 import { saveAndSharePDF } from '../utils/pdfHandler';
 import dayjs from 'dayjs';
+import QRCode from 'qrcode'; // <--- Import di sini
 
 const route = useRoute();
 const router = useRouter();
 const transaksi = ref(null);
 
-const qrCodeBase64 = route.query.qrCode;
+const qrCodeBase64 = ref(null);
 
 onMounted(async () => {
     const id = Number(route.query.id);
     if (id) {
         transaksi.value = await db.penjualan.get(id);
+        // Generate QR Code di sini setelah data transaksi di-fetch
+        if (transaksi.value && transaksi.value.tokenNota) {
+            const urlTujuan = `https://rafifs-ops.github.io/note-viewer-smartpos/?t=${transaksi.value.tokenNota}`;
+            qrCodeBase64.value = await QRCode.toDataURL(urlTujuan, { margin: 2, width: 200 });
+        }
     }
     if (!transaksi.value) {
         alert("Data transaksi tidak ditemukan!");
@@ -120,13 +126,13 @@ const unduhPDF = async () => {
     const finalY = doc.lastAutoTable.finalY;
 
     // -- KODE BARU: Menambahkan QR Code di bawah nota --
-    if (route.query.qrCode) {
+    if (qrCodeBase64.value) {
         const qrSize = 35; // Lebar dan Tinggi QR Code dalam satuan dokumen (milimeter)
         const posX = 14;   // Jarak dari kiri
         const posY = finalY + 10; // Jarak dari tabel (turun sedikit)
 
         // Format: addImage(imageData, format, x, y, width, height)
-        doc.addImage(route.query.qrCode, 'PNG', posX, posY, qrSize, qrSize);
+        doc.addImage(qrCodeBase64.value, 'PNG', posX, posY, qrSize, qrSize);
 
         // Tambahkan teks petunjuk di sebelah atau di bawah QR Code
         doc.setFontSize(9);
