@@ -56,7 +56,7 @@
                                     <h4 class="text-base font-bold text-slate-900 leading-tight">
                                         {{ produk.nama }}
                                         <span class="text-sm font-semibold text-blue-600 ml-1">x{{ produk.quantity
-                                        }}</span>
+                                            }}</span>
                                     </h4>
                                     <span
                                         class="px-2 py-0.5 text-[10px] font-bold text-emerald-700 bg-emerald-100 rounded-md uppercase tracking-wider">
@@ -125,6 +125,8 @@ import { useProducts } from '../composables/useProduct';
 import { db } from '../database/db';
 import dayjs from 'dayjs';
 import { useRouter } from 'vue-router';
+import { SignJWT } from 'jose';
+import QRCode from 'qrcode';
 
 const router = useRouter();
 const { getProduct, decreaseProductStock } = useProducts();
@@ -198,9 +200,31 @@ const prosesPenjualan = async () => {
         );
         await Promise.all(updateStokPromises);
 
-        // 3. Reset kasir dan alihkan ke halaman Receipt
+        // 3. Reset kasir
         resetTotal();
-        router.push({ path: '/receipt', query: { id: idTransaksi } });
+
+        // 4. Generate JWT (Ganti 'RAHASIA_NOTA_ANDA' dengan kunci rahasia aplikasi Anda)
+        const secret = new TextEncoder().encode('RAHASIA_NOTA_ANDA');
+        const token = await new SignJWT({
+            tanggal: tanggal,
+            totalPenjualan: totalPenjualan.value,
+            totalHpp: totalHppKasir.value,
+            items: JSON.parse(JSON.stringify(barangDitemukan.value)) // Clone array
+        })
+            .setProtectedHeader({ alg: 'HS256' })
+            .setIssuedAt()
+            // Opsional: .setExpirationTime('2h') jika nota ada masa kedaluwarsanya
+            .sign(secret);
+
+        // 5. Buat URL Tujuan
+        const urlTujuan = `https://www.seenota.com?t=${token}`;
+
+        // 6. Generate QR Code menjadi Base64 Image
+        // Margin diset agar QR Code terlihat rapi saat diprint
+        qrCodeBase64.value = await QRCode.toDataURL(urlTujuan, { margin: 2, width: 200 });
+
+        // 7. Alihkan ke halaman Receipt
+        router.push({ path: '/receipt', query: { id: idTransaksi, qrCode: qrCodeBase64.value } });
     } catch (error) {
         console.error('Gagal menyimpan penjualan:', error);
         alert('Terjadi kesalahan saat memproses penjualan.' + ' ' + error);

@@ -191,14 +191,20 @@ const simpanEdit = async () => {
 };
 
 const tambahStok = async (item) => {
-    const currentQty = item.quantity || 0;
-    await updateProductStock(item.id, currentQty + 1);
+    // 1. Ubah angka di layar seketika (Optimistic Update)
+    item.quantity = (item.quantity || 0) + 1;
+
+    // 2. Simpan ke database di latar belakang
+    await updateProductStock(item.id, item.quantity);
 };
 
 const kurangiStok = async (item) => {
-    const currentQty = item.quantity || 0;
-    if (currentQty > 0) {
-        await updateProductStock(item.id, currentQty - 1);
+    if ((item.quantity || 0) > 0) {
+        // 1. Ubah angka di layar seketika (Optimistic Update)
+        item.quantity -= 1;
+
+        // 2. Simpan ke database di latar belakang
+        await updateProductStock(item.id, item.quantity);
     }
 };
 

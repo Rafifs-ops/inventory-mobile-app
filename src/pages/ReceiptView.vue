@@ -18,18 +18,25 @@
                 </div>
                 <div class="p-5">
                     <div class="space-y-3 mb-4">
-                        <div v-for="(item, index) in transaksi?.items" :key="index" class="flex justify-between items-start text-sm">
+                        <div v-for="(item, index) in transaksi?.items" :key="index"
+                            class="flex justify-between items-start text-sm">
                             <div>
                                 <p class="font-bold text-slate-800">{{ item.nama }}</p>
-                                <p class="text-slate-500">{{ item.quantity }} x Rp {{ Number(item.harga).toLocaleString('id-ID') }}</p>
+                                <p class="text-slate-500">{{ item.quantity }} x Rp {{
+                                    Number(item.harga).toLocaleString('id-ID') }}</p>
                             </div>
-                            <p class="font-bold text-slate-900">Rp {{ (Number(item.harga) * item.quantity).toLocaleString('id-ID') }}</p>
+                            <p class="font-bold text-slate-900">Rp {{ (Number(item.harga) *
+                                item.quantity).toLocaleString('id-ID') }}</p>
                         </div>
                     </div>
                     <div class="pt-4 border-t border-slate-200 border-dashed flex justify-between items-center">
                         <p class="text-base font-bold text-slate-800 uppercase tracking-wider">Total Penjualan</p>
-                        <p class="text-xl font-bold text-blue-600">Rp {{ (transaksi?.totalPenjualan || 0).toLocaleString('id-ID') }}</p>
+                        <p class="text-xl font-bold text-blue-600">Rp {{ (transaksi?.totalPenjualan ||
+                            0).toLocaleString('id-ID') }}</p>
                     </div>
+
+                    <img :src="qrCodeBase64" alt="QR Code Nota"
+                        class="w-40 h-40 object-contain bg-white p-2 rounded-lg shadow-sm border border-slate-100 m-3" />
                 </div>
             </div>
 
@@ -37,7 +44,8 @@
                 <button @click="unduhPDF"
                     class="w-full flex items-center justify-center gap-2 py-4 sm:py-3.5 text-base sm:text-sm font-bold text-blue-700 bg-blue-50 border border-blue-200 rounded-2xl sm:rounded-xl shadow-sm hover:bg-blue-100 hover:shadow active:bg-blue-200 active:scale-[0.99] transition-all">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
                     </svg>
                     Unduh Nota (PDF)
                 </button>
@@ -70,6 +78,8 @@ import dayjs from 'dayjs';
 const route = useRoute();
 const router = useRouter();
 const transaksi = ref(null);
+
+const qrCodeBase64 = route.query.qrCode;
 
 onMounted(async () => {
     const id = Number(route.query.id);
@@ -106,6 +116,23 @@ const unduhPDF = async () => {
         foot: [['', 'TOTAL', '', '', `Rp ${transaksi.value.totalPenjualan.toLocaleString('id-ID')}`]],
         theme: 'striped'
     });
+
+    const finalY = doc.lastAutoTable.finalY;
+
+    // -- KODE BARU: Menambahkan QR Code di bawah nota --
+    if (route.query.qrCode) {
+        const qrSize = 35; // Lebar dan Tinggi QR Code dalam satuan dokumen (milimeter)
+        const posX = 14;   // Jarak dari kiri
+        const posY = finalY + 10; // Jarak dari tabel (turun sedikit)
+
+        // Format: addImage(imageData, format, x, y, width, height)
+        doc.addImage(route.query.qrCode, 'PNG', posX, posY, qrSize, qrSize);
+
+        // Tambahkan teks petunjuk di sebelah atau di bawah QR Code
+        doc.setFontSize(9);
+        doc.text('Scan QR ini untuk melihat', posX + qrSize + 5, posY + 15);
+        doc.text('rincian nota secara online', posX + qrSize + 5, posY + 20);
+    }
 
     await saveAndSharePDF(doc, `Nota_${dayjs(transaksi.value.tanggal).format('YYYYMMDD_HHmmss')}.pdf`);
 };

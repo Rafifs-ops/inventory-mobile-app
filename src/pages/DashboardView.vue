@@ -154,13 +154,18 @@
                 <p class="text-sm font-medium text-slate-500">Belum ada data penjualan bulan ini.</p>
             </div>
 
-            <button @click="eksporLabaRugi"
-                class="w-full flex justify-center items-center py-3.5 sm:py-2.5 px-4 rounded-xl sm:rounded-lg shadow-sm text-base sm:text-sm font-semibold text-white bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-600 transition-colors">
-                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                </svg>
-                Unduh Laporan Laba Rugi (PDF)
+            <button @click="eksporLabaRugi" :disabled="isLoading"
+                class="w-full flex justify-center items-center py-3.5 sm:py-2.5 px-4 rounded-xl sm:rounded-lg shadow-sm text-base sm:text-sm font-semibold text-white bg-red-600 hover:bg-red-700 active:bg-red-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-600 transition-colors">
+                <span v-if="isLoading">Memproses...</span>
+                <span v-else>
+                    Unduh Laporan Laba Rugi (PDF)
+                </span>
+            </button>
+
+            <button @click="downloadExcel" :disabled="isLoading"
+                class="w-full flex justify-center items-center py-3.5 sm:py-2.5 px-4 my-3 rounded-xl sm:rounded-lg shadow-sm text-base sm:text-sm font-semibold text-white bg-green-600 hover:bg-green-700 active:bg-green-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-600 transition-colors">
+                <span v-if="isLoading">Memproses...</span>
+                <span v-else>Unduh Laporan Laba Rugi (Excel)</span>
             </button>
 
             <RouterLink to="/"
@@ -184,12 +189,15 @@ import jsPDF from 'jspdf';
 import 'jspdf-autotable';
 import autoTable from 'jspdf-autotable';
 import { saveAndSharePDF } from '../utils/pdfHandler';
+import { exportLabaRugiExcel } from '../utils/excelHandler';
 
 const filterBulan = ref(dayjs().format('YYYY-MM'));
 const totalJualBulanan = ref(0);
 const labaBersih = ref(0);
 const produkTerlaris = ref(null);
 const produkPalingSepi = ref(null);
+
+const isLoading = ref(false);
 
 // Variabel untuk PDF
 const totalHppBaru = ref(0);
@@ -293,6 +301,19 @@ const eksporLabaRugi = async () => {
     });
 
     await saveAndSharePDF(doc, `Laporan_Laba_Rugi_${filterBulan.value}.pdf`);
+};
+
+const downloadExcel = async () => {
+    if (!filterBulan.value) return alert('Pilih bulan terlebih dahulu');
+
+    isLoading.value = true;
+    try {
+        await exportLabaRugiExcel(filterBulan.value);
+    } catch (error) {
+        alert('Terjadi kesalahan saat mengunduh laporan.');
+    } finally {
+        isLoading.value = false;
+    }
 };
 
 onMounted(() => {

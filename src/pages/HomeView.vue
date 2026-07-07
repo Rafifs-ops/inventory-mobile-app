@@ -17,24 +17,6 @@
             <div class="p-5 sm:p-8 flex-grow bg-slate-50 sm:bg-white">
                 <div class="grid grid-cols-1 gap-3.5 sm:gap-4">
 
-                    <button @click="navigasiKe('/hpp')"
-                        class="group flex items-center p-4 bg-white border border-slate-200 rounded-xl hover:bg-slate-50 hover:border-blue-300 hover:shadow-md active:bg-slate-100 transition-all text-left shadow-sm sm:shadow-none">
-                        <div
-                            class="flex items-center justify-center w-14 h-14 sm:w-12 sm:h-12 bg-blue-50 text-blue-700 rounded-xl shrink-0 group-hover:scale-105 transition-transform">
-                            <svg class="w-7 h-7 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
-                            </svg>
-                        </div>
-                        <div class="ml-4">
-                            <h3
-                                class="text-base sm:text-lg font-bold text-slate-800 group-hover:text-blue-700 transition-colors tracking-tight">
-                                Kalkulator HPP
-                            </h3>
-                            <p class="text-sm text-slate-500 mt-0.5 font-medium">Hitung HPP per produk & Harga Jual</p>
-                        </div>
-                    </button>
-
                     <button @click="navigasiKe('/dashboard')"
                         class="group flex items-center p-4 bg-white border border-slate-200 rounded-xl hover:bg-slate-50 hover:border-indigo-300 hover:shadow-md active:bg-slate-100 transition-all text-left shadow-sm sm:shadow-none">
                         <div
@@ -144,6 +126,24 @@
                                 Riwayat Penjualan
                             </h3>
                             <p class="text-sm text-slate-500 mt-0.5 font-medium">Riwayat nota & transaksi</p>
+                        </div>
+                    </button>
+
+                    <button @click="navigasiKe('/hpp')"
+                        class="group flex items-center p-4 bg-white border border-slate-200 rounded-xl hover:bg-slate-50 hover:border-blue-300 hover:shadow-md active:bg-slate-100 transition-all text-left shadow-sm sm:shadow-none">
+                        <div
+                            class="flex items-center justify-center w-14 h-14 sm:w-12 sm:h-12 bg-blue-50 text-blue-700 rounded-xl shrink-0 group-hover:scale-105 transition-transform">
+                            <svg class="w-7 h-7 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                            </svg>
+                        </div>
+                        <div class="ml-4">
+                            <h3
+                                class="text-base sm:text-lg font-bold text-slate-800 group-hover:text-blue-700 transition-colors tracking-tight">
+                                Kalkulator HPP
+                            </h3>
+                            <p class="text-sm text-slate-500 mt-0.5 font-medium">Hitung HPP per produk & Harga Jual</p>
                         </div>
                     </button>
 
