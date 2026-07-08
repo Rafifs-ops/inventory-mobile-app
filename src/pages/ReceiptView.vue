@@ -91,7 +91,7 @@ onMounted(async () => {
         // Generate QR Code di sini setelah data transaksi di-fetch
         if (transaksi.value && transaksi.value.tokenNota) {
             const urlTujuan = `https://rafifs-ops.github.io/note-viewer-smartpos/?t=${transaksi.value.tokenNota}`;
-            qrCodeBase64.value = await QRCode.toDataURL(urlTujuan, { margin: 2, width: 200 });
+            qrCodeBase64.value = await QRCode.toDataURL(urlTujuan, { margin: 4, width: 400, errorCorrectionLevel: 'M', scale: 8 });
         }
     }
     if (!transaksi.value) {

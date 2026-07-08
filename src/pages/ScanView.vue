@@ -56,7 +56,7 @@
                                     <h4 class="text-base font-bold text-slate-900 leading-tight">
                                         {{ produk.nama }}
                                         <span class="text-sm font-semibold text-blue-600 ml-1">x{{ produk.quantity
-                                            }}</span>
+                                        }}</span>
                                     </h4>
                                     <span
                                         class="px-2 py-0.5 text-[10px] font-bold text-emerald-700 bg-emerald-100 rounded-md uppercase tracking-wider">
@@ -127,7 +127,6 @@ import { db } from '../database/db';
 import dayjs from 'dayjs';
 import { useRouter } from 'vue-router';
 import { SignJWT } from 'jose';
-import QRCode from 'qrcode';
 
 const router = useRouter();
 const { getProduct, decreaseProductStock } = useProducts();
@@ -135,7 +134,6 @@ const { showToast } = useToast();
 const isProcessing = ref(false);
 
 const barangDitemukan = ref([]);
-const qrCodeBase64 = ref('');
 
 const totalPenjualan = ref(0);
 const totalKeuntungan = ref(0);
