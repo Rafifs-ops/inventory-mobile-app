@@ -75,9 +75,11 @@ import autoTable from 'jspdf-autotable';
 import { saveAndSharePDF } from '../utils/pdfHandler';
 import dayjs from 'dayjs';
 import QRCode from 'qrcode'; // <--- Import di sini
+import { useToast } from '../composables/useToast';
 
 const route = useRoute();
 const router = useRouter();
+const { showToast } = useToast();
 const transaksi = ref(null);
 
 const qrCodeBase64 = ref(null);
@@ -93,7 +95,7 @@ onMounted(async () => {
         }
     }
     if (!transaksi.value) {
-        alert("Data transaksi tidak ditemukan!");
+        showToast("Data transaksi tidak ditemukan!", "error");
         router.replace('/');
     }
 });

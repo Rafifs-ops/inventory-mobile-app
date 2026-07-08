@@ -104,9 +104,11 @@ import { reactive, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 import { CapacitorBarcodeScanner } from '@capacitor/barcode-scanner';
 import { useProducts } from '../composables/useProduct';
+import { useToast } from '../composables/useToast';
 
 const route = useRoute();
 const { addProduct, getProduct } = useProducts();
+const { showToast } = useToast();
 
 const form = reactive({
     id: '',
@@ -145,14 +147,14 @@ const scanIdSaja = async () => {
 // Fungsi menyimpan data
 const simpanProduk = async () => {
     if (!form.id) {
-        alert('ID Barcode tidak boleh kosong!');
+        showToast('ID Barcode tidak boleh kosong!', 'warning');
         return;
     }
 
     try {
         const produkSudahAda = await getProduct(form.id);
         if (produkSudahAda) {
-            alert(`Peringatan! Barcode ID ${form.id} sudah terdaftar atas nama "${produkSudahAda.nama}". Jika ingin menambah stok, silakan gunakan menu Daftar Inventaris.`);
+            showToast(`Peringatan! Barcode ID ${form.id} sudah terdaftar atas nama "${produkSudahAda.nama}". Jika ingin menambah stok, silakan gunakan menu Daftar Inventaris.`, 'warning');
             return; // Hentikan eksekusi
         }
 
@@ -165,10 +167,10 @@ const simpanProduk = async () => {
             quantity: Number(form.quantity),
             createdAt: Date.now()
         });
-        alert(`Barang ${form.nama} berhasil disimpan!`);
+        showToast(`Barang ${form.nama} berhasil disimpan!`, 'success');
     } catch (error) {
         console.error('Gagal menyimpan produk:', error);
-        alert('Gagal menyimpan produk!');
+        showToast('Gagal menyimpan produk!', 'error');
         return;
     } finally {
         form.id = '';

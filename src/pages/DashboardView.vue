@@ -190,8 +190,10 @@ import 'jspdf-autotable';
 import autoTable from 'jspdf-autotable';
 import { saveAndSharePDF } from '../utils/pdfHandler';
 import { exportLabaRugiExcel } from '../utils/excelHandler';
+import { useToast } from '../composables/useToast';
 
 const filterBulan = ref(dayjs().format('YYYY-MM'));
+const { showToast } = useToast();
 const totalJualBulanan = ref(0);
 const labaBersih = ref(0);
 const produkTerlaris = ref(null);
@@ -304,13 +306,16 @@ const eksporLabaRugi = async () => {
 };
 
 const downloadExcel = async () => {
-    if (!filterBulan.value) return alert('Pilih bulan terlebih dahulu');
+    if (!filterBulan.value) {
+        showToast('Pilih bulan terlebih dahulu', 'warning');
+        return;
+    }
 
     isLoading.value = true;
     try {
         await exportLabaRugiExcel(filterBulan.value);
     } catch (error) {
-        alert('Terjadi kesalahan saat mengunduh laporan.');
+        showToast('Terjadi kesalahan saat mengunduh laporan.', 'error');
     } finally {
         isLoading.value = false;
     }

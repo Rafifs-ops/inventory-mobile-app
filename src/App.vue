@@ -3,6 +3,7 @@ import { RouterView } from 'vue-router';
 import { onMounted } from 'vue';
 import { App } from '@capacitor/app';
 import { useRouter, useRoute } from 'vue-router';
+import ToastNotification from '@/components/ToastNotification.vue';
 
 const router = useRouter();
 const route = useRoute();
@@ -27,4 +28,5 @@ onMounted(() => {
 
 <template>
   <RouterView />
+  <ToastNotification />
 </template>

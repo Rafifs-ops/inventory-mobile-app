@@ -1,16 +1,7 @@
 import { ref } from 'vue';
 import { db } from '../database/db'; // Sesuaikan path dengan lokasi file db.js Anda
-import dayjs from 'dayjs';
 
 const productList = ref([]);
-
-// Buat helper untuk sinkronisasi HPP
-const syncPersediaanSnapshot = async () => {
-    const semuaProduk = await db.produk.toArray();
-    const liveTotalPersediaan = semuaProduk.reduce((sum, item) => sum + ((item.quantity || 0) * (item.hpp || 0)), 0);
-    const bulanIni = dayjs().format('YYYY-MM');
-    await db.persediaan.put({ bulanTahun: bulanIni, totalNilai: liveTotalPersediaan });
-};
 
 export function useProducts() {
 
@@ -38,7 +29,6 @@ export function useProducts() {
         try {
             // Menggunakan put() alih-alih add() agar jika ID sudah ada, data akan di-update (Upsert)
             await db.produk.put(product);
-            await syncPersediaanSnapshot();
             await loadProducts(); // Refresh list setelah menyimpan
         } catch (error) {
             console.error('Gagal menyimpan produk:', error);
@@ -61,7 +51,6 @@ export function useProducts() {
             if (product && product.quantity !== undefined) {
                 const newQty = Math.max(0, product.quantity - qtySold);
                 await db.produk.update(id, { quantity: newQty });
-                await syncPersediaanSnapshot();
             }
         } catch (error) {
             console.error('Gagal mengupdate stok produk:', error);
@@ -75,7 +64,6 @@ export function useProducts() {
             if (product) {
                 const newQty = Math.max(0, (product.quantity || 0) + penambahan);
                 await db.produk.update(id, { quantity: newQty });
-                await syncPersediaanSnapshot();
                 await loadProducts(); // Refresh list agar UI terupdate
             }
         } catch (error) {
@@ -87,7 +75,6 @@ export function useProducts() {
     const updateProductDetails = async (id, updatedData) => {
         try {
             await db.produk.update(id, updatedData);
-            await syncPersediaanSnapshot();
             await loadProducts();
         } catch (error) {
             console.error('Gagal mengupdate detail produk:', error);

@@ -1,6 +1,9 @@
 import { Filesystem, Directory } from '@capacitor/filesystem';
 import { Share } from '@capacitor/share';
 import { Capacitor } from '@capacitor/core';
+import { useToast } from '../composables/useToast';
+
+const { showToast } = useToast();
 
 export const saveAndSharePDF = async (doc, filename) => {
     try {
@@ -39,6 +42,6 @@ export const saveAndSharePDF = async (doc, filename) => {
         }
     } catch (error) {
         console.error('Error saat menyimpan atau membagikan PDF:', error);
-        alert('Gagal menyimpan dokumen. Pastikan penyimpanan perangkat Anda cukup dan coba kembali.');
+        showToast('Gagal menyimpan dokumen. Pastikan penyimpanan perangkat Anda cukup dan coba kembali.', 'error');
     }
 };

@@ -122,6 +122,7 @@ import { ref } from 'vue';
 import { onBeforeRouteLeave } from 'vue-router';
 import { CapacitorBarcodeScanner } from '@capacitor/barcode-scanner';
 import { useProducts } from '../composables/useProduct';
+import { useToast } from '../composables/useToast';
 import { db } from '../database/db';
 import dayjs from 'dayjs';
 import { useRouter } from 'vue-router';
@@ -130,6 +131,7 @@ import QRCode from 'qrcode';
 
 const router = useRouter();
 const { getProduct, decreaseProductStock } = useProducts();
+const { showToast } = useToast();
 const isProcessing = ref(false);
 
 const barangDitemukan = ref([]);
@@ -157,7 +159,7 @@ const mulaiScan = async () => {
 
                 // VALIDASI STOK
                 if (qtyDiKeranjang >= produk.quantity) {
-                    alert(`Stok "${produk.nama}" tidak mencukupi! Sisa stok sistem: ${produk.quantity}`);
+                    showToast(`Stok "${produk.nama}" tidak mencukupi! Sisa stok sistem: ${produk.quantity}`, 'warning');
                     return; // Hentikan proses jika stok habis
                 }
 
@@ -173,7 +175,7 @@ const mulaiScan = async () => {
                 totalKeuntungan.value += (Number(produk.harga) - modalHpp);
                 totalHppKasir.value += modalHpp;
             } else {
-                alert(`Produk belum terdaftar.`);
+                showToast(`Produk belum terdaftar.`, 'warning');
             }
         }
     } catch (error) {
@@ -222,7 +224,7 @@ const prosesPenjualan = async () => {
         router.push({ path: '/receipt', query: { id: idTransaksi } });
     } catch (error) {
         console.error('Gagal menyimpan penjualan:', error);
-        alert('Terjadi kesalahan saat memproses penjualan.' + ' ' + error);
+        showToast('Terjadi kesalahan saat memproses penjualan. ' + error, 'error');
     } finally {
         isProcessing.value = false; // <-- Pindahkan ke blok finally
     }

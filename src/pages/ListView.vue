@@ -164,9 +164,11 @@
 <script setup>
 import { onMounted, ref } from 'vue';
 import { useProducts } from '../composables/useProduct';
+import { useToast } from '../composables/useToast';
 
 // Import deleteProduct dan updateProductStock dari composable
 const { productList, loadProducts, deleteProduct, ubahStokAman, updateProductDetails } = useProducts();
+const { showToast } = useToast();
 
 const showEditModal = ref(false);
 const editForm = ref({ id: '', nama: '', harga: '', hpp: '' });
@@ -207,7 +209,7 @@ onMounted(async () => {
 // Fungsi untuk memunculkan peringatan sebelum menghapus
 const konfirmasiHapus = async (item) => {
     if (item.quantity > 0) {
-        alert(`Gagal! Produk "${item.nama}" masih memiliki stok ${item.quantity}. Kosongkan stok terlebih dahulu agar tidak merusak laporan HPP.`);
+        showToast(`Gagal! Produk "${item.nama}" masih memiliki stok ${item.quantity}. Kosongkan stok terlebih dahulu agar tidak merusak laporan HPP.`, 'error');
         return;
     }
 

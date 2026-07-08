@@ -89,6 +89,9 @@
 import { ref } from 'vue';
 import { db } from '../database/db';
 import dayjs from 'dayjs';
+import { useToast } from '../composables/useToast';
+
+const { showToast } = useToast();
 
 const form = ref({
     jenis: '',
@@ -105,12 +108,12 @@ const simpanBiaya = async () => {
             bulanTahun: form.value.bulanTahun,
             keterangan: form.value.keterangan
         });
-        alert('Data biaya berhasil disimpan!');
+        showToast('Data biaya berhasil disimpan!', 'success');
         form.value.nominal = '';
         form.value.keterangan = '';
     } catch (error) {
         console.error(error);
-        alert('Gagal menyimpan biaya');
+        showToast('Gagal menyimpan biaya', 'error');
     }
 };
 </script>
