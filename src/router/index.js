@@ -18,7 +18,9 @@ const router = createRouter({
     { path: '/biaya', name: 'biaya', component: BiayaView },
     { path: '/dashboard', name: 'dashboard', component: DashboardView },
     { path: '/receipt', name: 'receipt', component: () => import('../pages/ReceiptView.vue') },
-    { path: '/history', name: 'history', component: () => import('../pages/SalesHistoryView.vue') }
+    { path: '/history', name: 'history', component: () => import('../pages/SalesHistoryView.vue') },
+    { path: '/about', name: 'about', component: () => import('../pages/AboutView.vue') },
+    { path: '/guide', name: 'guide', component: () => import('../pages/GuideView.vue') }
   ],
   scrollBehavior(to, from, savedPosition) {
     // Kembali ke posisi scroll sebelumnya jika user menekan tombol Back/Forward di browser

@@ -127,6 +127,30 @@ const daftarMenu = [
             hoverText: 'group-hover:text-blue-700'
         },
         icon: '<svg class="w-7 h-7 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" /></svg>'
+    },
+    {
+        title: 'Panduan Aplikasi',
+        desc: 'Penjelasan istilah & fitur',
+        path: '/guide',
+        classes: {
+            hoverBorder: 'hover:border-indigo-300',
+            bgIcon: 'bg-indigo-50',
+            textIcon: 'text-indigo-700',
+            hoverText: 'group-hover:text-indigo-700'
+        },
+        icon: '<svg class="w-7 h-7 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>'
+    },
+    {
+        title: 'Tentang Aplikasi',
+        desc: 'Informasi Developer & Kebijakan',
+        path: '/about',
+        classes: {
+            hoverBorder: 'hover:border-gray-300',
+            bgIcon: 'bg-gray-50',
+            textIcon: 'text-gray-700',
+            hoverText: 'group-hover:text-gray-700'
+        },
+        icon: '<svg class="w-7 h-7 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>'
     }
 ];
 </script>
