@@ -1,55 +1,19 @@
 <template>
-    <div class="min-h-screen bg-white sm:bg-slate-50 text-slate-900 pb-10 sm:py-12 flex flex-col items-center">
+    <div
+        class="min-h-screen bg-gradient-to-br from-blue-800 to-blue-600 text-slate-900 pb-10 sm:py-12 flex flex-col items-center">
 
         <div class="w-full sm:max-w-md px-5 sm:px-0">
 
             <div
                 class="pt-6 sm:pt-0 mb-6 sm:mb-8 text-center sm:text-left border-b border-slate-100 sm:border-none pb-4 sm:pb-0">
-                <h2 class="text-2xl font-bold text-slate-900 tracking-tight">Pemindaian Produk</h2>
-                <p class="text-sm text-slate-500 mt-1.5">Sistem pencatatan kasir dan inventaris cepat</p>
+                <h2 class="text-2xl font-bold text-white tracking-tight">Pemindaian Produk</h2>
+                <p class="text-sm text-white mt-1.5">Sistem pencatatan kasir dan inventaris cepat</p>
             </div>
 
-            <div class="grid grid-cols-2 gap-3 sm:gap-4 mb-6">
-                <div
-                    class="p-4 sm:p-5 bg-white border border-slate-200 rounded-2xl sm:rounded-xl shadow-sm flex flex-col justify-center">
-                    <p class="text-xs font-bold text-slate-500 uppercase tracking-wider">Total Penjualan</p>
-                    <p class="mt-1.5 text-lg sm:text-xl font-bold text-slate-900 truncate tracking-tight">
-                        Rp {{ totalPenjualan.toLocaleString('id-ID') }}
-                    </p>
-                </div>
-                <div
-                    class="p-4 sm:p-5 bg-emerald-50 sm:bg-emerald-50/80 border border-emerald-100 rounded-2xl sm:rounded-xl shadow-sm flex flex-col justify-center">
-                    <p class="text-xs font-bold text-emerald-700 uppercase tracking-wider">Est. Keuntungan</p>
-                    <p class="mt-1.5 text-lg sm:text-xl font-bold text-emerald-700 truncate tracking-tight">
-                        Rp {{ totalKeuntungan.toLocaleString('id-ID') }}
-                    </p>
-                </div>
-            </div>
+            <ScanSummary :total-penjualan="totalPenjualan" :total-keuntungan="totalKeuntungan" />
 
-            <button @click="mulaiScan"
-                class="w-full flex items-center justify-center gap-2 py-4 sm:py-3.5 text-base sm:text-sm font-bold text-white transition-all bg-blue-600 border border-transparent rounded-2xl sm:rounded-xl shadow-md hover:bg-blue-700 hover:shadow-lg active:bg-blue-800 active:scale-[0.99] focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2">
-                <svg class="w-6 h-6 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm14 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z">
-                    </path>
-                </svg>
-                Mulai Pindai Barcode
-            </button>
-
-            <div class="flex items-center gap-3 mt-5 mb-5">
-                <div class="h-px bg-slate-200 flex-1"></div>
-                <span class="text-xs font-medium text-slate-400 uppercase tracking-wider">Atau</span>
-                <div class="h-px bg-slate-200 flex-1"></div>
-            </div>
-
-            <div class="flex gap-2">
-                <input v-model="manualId" @keyup.enter="tambahManual" type="text" placeholder="Masukkan ID manual..."
-                    class="flex-1 px-4 py-4 sm:py-3.5 text-base sm:text-sm bg-white border border-slate-200 rounded-2xl sm:rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-shadow shadow-sm" />
-                <button @click="tambahManual"
-                    class="px-6 py-4 sm:py-3.5 text-base sm:text-sm font-bold text-white bg-slate-800 hover:bg-slate-900 active:scale-[0.99] rounded-2xl sm:rounded-xl transition-all shadow-sm">
-                    Tambah
-                </button>
-            </div>
+            <ScanInput @scan="mulaiScan" @tambah-manual="tambahProdukKeKeranjang"
+                @buka-pencarian="isSearchModalOpen = true" />
 
             <div v-if="barangDitemukan?.length > 0" class="mt-8">
                 <div class="flex items-center justify-between mb-4 px-1 sm:px-0">
@@ -62,52 +26,8 @@
                 </div>
 
                 <div class="space-y-3 sm:space-y-2.5">
-                    <div v-for="(produk, index) in barangDitemukan" :key="index"
-                        class="p-4 sm:p-5 bg-white border border-slate-200 rounded-2xl sm:rounded-xl shadow-sm hover:border-blue-300 transition-colors">
-
-                        <div class="flex justify-between items-start gap-4">
-                            <div class="flex-1">
-                                <div class="flex items-center flex-wrap gap-2 mb-1.5">
-                                    <h4 class="text-base font-bold text-slate-900 leading-tight">
-                                        {{ produk.nama }}
-                                        <span class="text-sm font-semibold text-blue-600 ml-1">x{{ produk.quantity
-                                        }}</span>
-                                    </h4>
-                                    <span
-                                        class="px-2 py-0.5 text-[10px] font-bold text-emerald-700 bg-emerald-100 rounded-md uppercase tracking-wider">
-                                        Berhasil
-                                    </span>
-                                </div>
-                                <p class="text-sm font-bold text-slate-700">
-                                    Rp {{ (produk.harga * produk.quantity).toLocaleString('id-ID') }}
-                                    <span class="text-xs text-slate-500 font-medium ml-1">
-                                        (@Rp {{ produk.harga.toLocaleString('id-ID') }})
-                                    </span>
-                                </p>
-                            </div>
-                        </div>
-
-                        <div
-                            class="mt-3 sm:mt-4 pt-3 sm:pt-4 border-t border-slate-100 flex justify-between items-center text-xs">
-                            <div class="flex gap-2">
-                                <span
-                                    class="text-slate-500 font-mono font-medium bg-slate-50 px-2 py-1 rounded-md border border-slate-200">
-                                    ID: {{ produk.id }}
-                                </span>
-                                <button @click="hapusItem(index)"
-                                    class="text-rose-600 bg-rose-50 px-2 py-1 rounded-md font-bold hover:bg-rose-100 mr-2">
-                                    Batal
-                                </button>
-                            </div>
-
-                            <span
-                                class="font-bold text-emerald-600 flex items-center gap-1.5 bg-emerald-50/50 px-2 py-1 rounded-md">
-                                Margin Rp {{ (((produk.harga - (produk.hpp || 0)) *
-                                    produk.quantity)).toLocaleString('id-ID')
-                                }}
-                            </span>
-                        </div>
-                    </div>
+                    <CartItem v-for="(produk, index) in barangDitemukan" :key="index" :produk="produk"
+                        @hapus="hapusItem(index)" />
                 </div>
 
                 <button @click="prosesPenjualan" :disabled="isProcessing"
@@ -118,7 +38,7 @@
 
             <div class="py-6 sm:py-0 sm:mt-8 w-full flex justify-center">
                 <RouterLink to="/"
-                    class="flex items-center px-4 py-2 text-sm font-medium text-slate-500 hover:text-slate-800 transition-colors rounded-lg">
+                    class="flex items-center px-4 py-2 text-sm font-medium text-white hover:text-slate-800 transition-colors rounded-lg">
                     <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M10 19l-7-7m0 0l7-7m-7 7h18" />
@@ -128,84 +48,49 @@
             </div>
 
         </div>
+
+        <ProductSearchModal :is-open="isSearchModalOpen" @close="isSearchModalOpen = false"
+            @select="onProductSelected" />
     </div>
 </template>
-
 
 <script setup>
 import { ref } from 'vue';
 import { onBeforeRouteLeave } from 'vue-router';
-import { CapacitorBarcodeScanner } from '@capacitor/barcode-scanner';
 import { useProducts } from '../composables/useProduct';
 import { useToast } from '../composables/useToast';
+import { useScanCart } from '../composables/useScanCart';
 import { db } from '../database/db';
 import dayjs from 'dayjs';
 import { useRouter } from 'vue-router';
 import { SignJWT } from 'jose';
 
+import ProductSearchModal from '../components/ProductSearchModal.vue';
+import ScanSummary from '../components/ScanSummary.vue';
+import ScanInput from '../components/ScanInput.vue';
+import CartItem from '../components/CartItem.vue';
+
 const router = useRouter();
-const { getProduct, decreaseProductStock } = useProducts();
+const { decreaseProductStock } = useProducts();
 const { showToast } = useToast();
 const isProcessing = ref(false);
 
-const barangDitemukan = ref([]);
-const manualId = ref('');
+const {
+    barangDitemukan,
+    totalPenjualan,
+    totalKeuntungan,
+    totalHppKasir,
+    tambahProdukKeKeranjang,
+    mulaiScan,
+    resetTotal,
+    hapusItem
+} = useScanCart();
 
-const totalPenjualan = ref(0);
-const totalKeuntungan = ref(0);
-const totalHppKasir = ref(0); // Tambahan untuk melacak HPP transaksi
+const isSearchModalOpen = ref(false);
 
-const tambahProdukKeKeranjang = async (idProduk) => {
-    if (!idProduk) return;
-    const produk = await getProduct(idProduk);
-
-    if (produk) {
-        const existingItemIndex = barangDitemukan.value.findIndex(item => item.id === produk.id);
-
-        // Cek jumlah barang yang sudah ada di keranjang
-        const qtyDiKeranjang = existingItemIndex !== -1 ? barangDitemukan.value[existingItemIndex].quantity : 0;
-
-        // VALIDASI STOK
-        if (qtyDiKeranjang >= produk.quantity) {
-            showToast(`Stok "${produk.nama}" tidak mencukupi! Sisa stok sistem: ${produk.quantity}`, 'warning');
-            return; // Hentikan proses jika stok habis
-        }
-
-        if (existingItemIndex !== -1) {
-            barangDitemukan.value[existingItemIndex].quantity += 1;
-        } else {
-            produk.quantity = 1; // inject quantity dari database menjadi quantity nota penjualan
-            barangDitemukan.value.push(produk);
-        }
-
-        const modalHpp = Number(produk.hpp) || 0;
-        totalPenjualan.value += Number(produk.harga);
-        totalKeuntungan.value += (Number(produk.harga) - modalHpp);
-        totalHppKasir.value += modalHpp;
-    } else {
-        showToast(`Produk dengan ID "${idProduk}" tidak ditemukan.`, 'warning');
-    }
-};
-
-const mulaiScan = async () => {
-    try {
-        const result = await CapacitorBarcodeScanner.scanBarcode({
-            hint: 17, cameraDirection: 1, scanOrientation: 1, android: { scanningLibrary: 'mlkit' }
-        });
-
-        if (result && result.ScanResult) {
-            const scannedId = result.ScanResult;
-            await tambahProdukKeKeranjang(scannedId);
-        }
-    } catch (error) {
-        console.error('Scan dibatalkan:', error);
-    }
-};
-
-const tambahManual = async () => {
-    if (manualId.value.trim() === '') return;
-    await tambahProdukKeKeranjang(manualId.value.trim());
-    manualId.value = ''; // Reset input after adding
+const onProductSelected = async (id) => {
+    isSearchModalOpen.value = false;
+    await tambahProdukKeKeranjang(id);
 };
 
 const prosesPenjualan = async () => {
@@ -213,66 +98,39 @@ const prosesPenjualan = async () => {
     isProcessing.value = true;
     const tanggal = dayjs().format('YYYY-MM-DD HH:mm:ss');
 
-    // Simpan ke database
     try {
-        // 1. Generate JWT (Ganti 'RAHASIA_NOTA_ANDA' dengan kunci rahasia aplikasi Anda)
         const secret = new TextEncoder().encode('RAHASIA_NOTA_ANDA');
         const token = await new SignJWT({
             tanggal: tanggal,
             totalPenjualan: totalPenjualan.value,
             totalHpp: totalHppKasir.value,
-            items: JSON.parse(JSON.stringify(barangDitemukan.value)) // Clone array
+            items: JSON.parse(JSON.stringify(barangDitemukan.value))
         })
             .setProtectedHeader({ alg: 'HS256' })
             .setIssuedAt()
-            // Opsional: .setExpirationTime('2h') jika nota ada masa kedaluwarsanya
             .sign(secret);
 
-        // 2. Simpan ke database (Tambahkan field tokenNota)
         const idTransaksi = await db.penjualan.add({
             tanggal: tanggal,
             totalPenjualan: totalPenjualan.value,
             totalHpp: totalHppKasir.value,
             items: JSON.parse(JSON.stringify(barangDitemukan.value)),
-            tokenNota: token // <--- Simpan token di sini
+            tokenNota: token
         });
 
-        // 3. Kurangi stok produk
         const updateStokPromises = barangDitemukan.value.map(item =>
             decreaseProductStock(item.id, item.quantity)
         );
         await Promise.all(updateStokPromises);
 
-        // 4. Reset kasir
         resetTotal();
-        // 5. Alihkan ke halaman Receipt
         router.push({ path: '/receipt', query: { id: idTransaksi } });
     } catch (error) {
         console.error('Gagal menyimpan penjualan:', error);
         showToast('Terjadi kesalahan saat memproses penjualan. ' + error, 'error');
     } finally {
-        isProcessing.value = false; // <-- Pindahkan ke blok finally
+        isProcessing.value = false;
     }
-};
-
-const resetTotal = () => {
-    totalPenjualan.value = 0;
-    totalKeuntungan.value = 0;
-    totalHppKasir.value = 0;
-    barangDitemukan.value = [];
-};
-
-const hapusItem = (index) => {
-    const item = barangDitemukan.value[index];
-    const modalHpp = Number(item.hpp) || 0;
-
-    // Kurangi kalkulasi total
-    totalPenjualan.value -= (item.harga * item.quantity);
-    totalKeuntungan.value -= ((item.harga - modalHpp) * item.quantity);
-    totalHppKasir.value -= (modalHpp * item.quantity);
-
-    // Hapus dari keranjang
-    barangDitemukan.value.splice(index, 1);
 };
 
 onBeforeRouteLeave((to, from, next) => {
@@ -281,12 +139,12 @@ onBeforeRouteLeave((to, from, next) => {
             'Ada transaksi kasir yang belum diselesaikan! Apakah Anda yakin ingin keluar? Semua daftar belanja di keranjang akan terhapus.'
         );
         if (konfirmasi) {
-            next(); // Izinkan pindah halaman
+            next();
         } else {
-            next(false); // Batalkan perpindahan halaman
+            next(false);
         }
     } else {
-        next(); // Langsung pindah jika keranjang kosong
+        next();
     }
 });
 </script>

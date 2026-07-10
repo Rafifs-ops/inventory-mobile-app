@@ -42,13 +42,6 @@
                     <p class="text-sm text-slate-500">Belum ada riwayat penjualan.</p>
                 </div>
             </div>
-
-            <div class="py-6 sm:py-0 sm:mt-8 w-full flex justify-center">
-                <RouterLink to="/"
-                    class="flex items-center px-4 py-2 text-sm font-medium text-white hover:text-slate-800 transition-colors rounded-lg">
-                    Kembali ke Beranda
-                </RouterLink>
-            </div>
         </div>
     </div>
 </template>
