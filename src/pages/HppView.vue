@@ -1,13 +1,13 @@
 <template>
-    <div class="min-h-screen bg-white sm:bg-slate-50 text-slate-900 flex flex-col sm:items-center sm:py-12">
+    <div
+        class="min-h-screen bg-gradient-to-br from-blue-800 to-blue-600 text-white flex flex-col sm:items-center sm:py-12">
 
         <div
-            class="w-full sm:max-w-lg bg-white sm:border sm:border-slate-200 sm:shadow-sm sm:rounded-2xl flex-grow sm:flex-grow-0 flex flex-col">
+            class="w-full sm:max-w-lg bg-gradient-to-br from-blue-800 to-blue-600 sm:border sm:border-slate-200 sm:shadow-sm sm:rounded-2xl flex-grow sm:flex-grow-0 flex flex-col">
 
-            <div
-                class="px-5 pt-8 pb-6 sm:px-6 sm:pt-6 sm:pb-4 border-b border-slate-100 sm:border-none text-center sm:text-left">
-                <h2 class="text-2xl font-bold text-slate-900 tracking-tight">Kalkulator HPP</h2>
-                <p class="text-sm text-slate-500 mt-1.5 leading-relaxed">
+            <div class="px-5 pt-8 pb-6 sm:px-6 sm:pt-6 sm:pb-4 sm:border-none text-center sm:text-left">
+                <h2 class="text-2xl font-bold text-white tracking-tight">Kalkulator HPP</h2>
+                <p class="text-sm text-white mt-1.5 leading-relaxed">
                     Hitung Harga Pokok Penjualan dan simulasi target keuntungan
                 </p>
             </div>
@@ -16,7 +16,7 @@
 
                 <div class="space-y-5 sm:space-y-4">
                     <div>
-                        <label class="block mb-2 sm:mb-1.5 text-sm font-semibold text-slate-700">Total Biaya
+                        <label class="block mb-2 sm:mb-1.5 text-sm font-semibold text-white">Total Biaya
                             Operasional</label>
                         <div class="relative">
                             <div class="absolute inset-y-0 left-0 flex items-center pl-4 sm:pl-3 pointer-events-none">
@@ -28,7 +28,7 @@
                     </div>
 
                     <div>
-                        <label class="block mb-2 sm:mb-1.5 text-sm font-semibold text-slate-700">Total Biaya Bahan
+                        <label class="block mb-2 sm:mb-1.5 text-sm font-semibold text-white">Total Biaya Bahan
                             Baku</label>
                         <div class="relative">
                             <div class="absolute inset-y-0 left-0 flex items-center pl-4 sm:pl-3 pointer-events-none">
@@ -40,7 +40,7 @@
                     </div>
 
                     <div>
-                        <label class="block mb-2 sm:mb-1.5 text-sm font-semibold text-slate-700">Jumlah Produk
+                        <label class="block mb-2 sm:mb-1.5 text-sm font-semibold text-white">Jumlah Produk
                             Dihasilkan</label>
                         <div class="relative">
                             <input v-model="qty" type="number" min="0" placeholder="0"
@@ -63,7 +63,7 @@
 
                 <div class="space-y-5 sm:space-y-4">
                     <div>
-                        <label class="block mb-2 sm:mb-1.5 text-sm font-semibold text-slate-700">Target
+                        <label class="block mb-2 sm:mb-1.5 text-sm font-semibold text-white">Target
                             Keuntungan</label>
                         <div class="relative w-full sm:w-1/2">
                             <input v-model="margin" type="number" min="0" placeholder="0"
@@ -84,9 +84,9 @@
             </div>
         </div>
 
-        <div class="py-6 sm:py-0 sm:mt-6 w-full sm:max-w-lg flex justify-center bg-slate-50 sm:bg-transparent">
+        <div class="py-6 sm:py-0 sm:mt-6 w-full sm:max-w-lg flex justify-center">
             <RouterLink to="/"
-                class="flex items-center px-4 py-2 text-sm font-medium text-slate-500 hover:text-slate-800 transition-colors rounded-lg">
+                class="flex items-center px-4 py-2 text-sm font-medium text-white transition-colors rounded-lg">
                 <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M10 19l-7-7m0 0l7-7m-7 7h18" />

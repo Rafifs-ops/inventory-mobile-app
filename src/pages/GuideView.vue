@@ -1,8 +1,8 @@
 <template>
-    <div class="p-4 bg-gray-50 min-h-screen pb-20">
+    <div class="p-4 bg-gradient-to-br from-blue-800 to-blue-600 min-h-screen pb-20">
         <div class="mb-6">
-            <h1 class="text-2xl font-bold text-gray-800">Panduan Aplikasi</h1>
-            <p class="text-sm text-gray-500 mt-1">Definisi dan istilah seputar keuangan bisnis.</p>
+            <h1 class="text-2xl font-bold text-white">Panduan Aplikasi</h1>
+            <p class="text-sm text-white mt-1">Definisi dan istilah seputar keuangan bisnis.</p>
         </div>
 
         <!-- Dropdown / Accordion List -->

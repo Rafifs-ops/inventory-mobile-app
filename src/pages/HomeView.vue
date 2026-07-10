@@ -14,20 +14,20 @@
                 </p>
             </div>
 
-            <div class="p-5 sm:p-8 flex-grow bg-slate-50 sm:bg-white">
+            <div class="p-5 sm:p-8 flex-grow bg-slate-50 bg-gradient-to-br from-blue-800 to-blue-600">
                 <div class="grid grid-cols-1 gap-3.5 sm:gap-4">
 
                     <button v-for="(menu, index) in daftarMenu" :key="index" @click="navigasiKe(menu.path)"
-                        :class="['group flex items-center p-4 bg-white border border-slate-200 rounded-xl hover:bg-slate-50 hover:shadow-md active:bg-slate-100 transition-all text-left shadow-sm sm:shadow-none', menu.classes.hoverBorder]">
+                        :class="['group flex items-center p-4 bg-gradient-to-br from-blue-500 to-blue-400 border border-blue-800 rounded-xl hover:bg-blue-200 hover:shadow-md active:bg-slate-100 transition-all text-left shadow-sm sm:shadow-none', menu.classes.hoverBorder]">
                         <div :class="['flex items-center justify-center w-14 h-14 sm:w-12 sm:h-12 rounded-xl shrink-0 group-hover:scale-105 transition-transform', menu.classes.bgIcon, menu.classes.textIcon]"
                             v-html="menu.icon">
                         </div>
                         <div class="ml-4">
                             <h3
-                                :class="['text-base sm:text-lg font-bold text-slate-800 transition-colors tracking-tight', menu.classes.hoverText]">
+                                :class="['text-base text-lg font-bold text-slate-800 transition-colors tracking-tight', menu.classes.hoverText]">
                                 {{ menu.title }}
                             </h3>
-                            <p class="text-sm text-slate-500 mt-0.5 font-medium">{{ menu.desc }}</p>
+                            <p class="text-sm text-slate-800 mt-0.5 font-medium">{{ menu.desc }}</p>
                         </div>
                     </button>
 
@@ -69,8 +69,8 @@ const daftarMenu = [
         icon: '<svg class="w-7 h-7 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>'
     },
     {
-        title: 'Scan Produk',
-        desc: 'Scan Barcode untuk penjualan',
+        title: 'Kasir & Transaksi',
+        desc: 'Proses kasir untuk penjualan',
         path: '/scan',
         classes: {
             hoverBorder: 'hover:border-teal-300',
@@ -81,7 +81,7 @@ const daftarMenu = [
         icon: '<svg class="w-7 h-7 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm14 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z" /></svg>'
     },
     {
-        title: 'Input Produk',
+        title: 'Catat Produk',
         desc: 'Catat produk baru',
         path: '/input',
         classes: {

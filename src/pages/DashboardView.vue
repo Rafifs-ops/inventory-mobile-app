@@ -1,17 +1,18 @@
 <template>
-    <div class="min-h-screen bg-white sm:bg-slate-50 text-slate-900 pb-10 sm:py-12 flex flex-col items-center">
+    <div
+        class="min-h-screen bg-gradient-to-br from-blue-800 to-blue-600 text-slate-900 pb-10 sm:py-12 flex flex-col items-center">
 
         <div class="w-full sm:max-w-3xl px-5 sm:px-0">
 
             <div
                 class="pt-6 sm:pt-0 mb-6 sm:mb-8 flex flex-col sm:flex-row sm:items-end justify-between gap-5 sm:gap-4">
                 <div>
-                    <h2 class="text-2xl font-bold text-slate-900 tracking-tight">Dashboard & Laporan</h2>
-                    <p class="text-sm text-slate-500 mt-1.5">Ringkasan performa finansial dan pergerakan produk</p>
+                    <h2 class="text-2xl font-bold text-white tracking-tight">Dashboard & Laporan</h2>
+                    <p class="text-sm text-white mt-1.5">Ringkasan performa finansial dan pergerakan produk</p>
                 </div>
 
                 <div class="w-full sm:w-auto">
-                    <label class="block mb-2 sm:mb-1.5 text-xs font-bold text-slate-500 uppercase tracking-wider">
+                    <label class="block mb-2 sm:mb-1.5 text-xs font-bold text-white uppercase tracking-wider">
                         Periode Laporan
                     </label>
                     <input type="month" v-model="filterBulan" @change="muatData"
@@ -68,13 +69,35 @@
                             class="p-4 bg-orange-50/50 sm:bg-orange-50 rounded-xl border border-orange-100 flex flex-col justify-center">
                             <p class="text-xs font-bold text-orange-600 uppercase mb-1.5 tracking-wide">Pemasaran</p>
                             <p class="text-lg font-bold text-orange-700">Rp {{ dBiayaPemasaran.toLocaleString('id-ID')
-                                }}</p>
+                            }}</p>
+                        </div>
+                        <div
+                            class="p-4 bg-green-50/50 sm:bg-green-50 rounded-xl border border-green-100 flex flex-col justify-center">
+                            <p class="text-xs font-bold text-green-600 uppercase mb-1.5 tracking-wide">Listrik Air &
+                                Internet</p>
+                            <p class="text-lg font-bold text-green-700">Rp {{
+                                dBiayaListrikAirInternet.toLocaleString('id-ID')
+                            }}</p>
                         </div>
                         <div
                             class="p-4 bg-purple-50/50 sm:bg-purple-50 rounded-xl border border-purple-100 flex flex-col justify-center">
                             <p class="text-xs font-bold text-purple-600 uppercase mb-1.5 tracking-wide">Admin</p>
                             <p class="text-lg font-bold text-purple-700">Rp {{ dBiayaAdmin.toLocaleString('id-ID') }}
                             </p>
+                        </div>
+                        <div
+                            class="p-4 bg-yellow-50/50 sm:bg-yellow-50 rounded-xl border border-yellow-100 flex flex-col justify-center">
+                            <p class="text-xs font-bold text-yellow-600 uppercase mb-1.5 tracking-wide">Perlengkapan
+                            </p>
+                            <p class="text-lg font-bold text-yellow-700">Rp {{
+                                dBiayaPerlengkapan.toLocaleString('id-ID')
+                            }}</p>
+                        </div>
+                        <div
+                            class="p-4 bg-red-50/50 sm:bg-red-50 rounded-xl border border-red-100 flex flex-col justify-center">
+                            <p class="text-xs font-bold text-red-600 uppercase mb-1.5 tracking-wide">Pajak
+                            </p>
+                            <p class="text-lg font-bold text-red-700">Rp {{ dBiayaPajak.toLocaleString('id-ID') }}</p>
                         </div>
                         <div
                             class="p-4 bg-sky-50/50 sm:bg-sky-50 rounded-xl border border-sky-100 flex flex-col justify-center">
@@ -97,7 +120,7 @@
                             <p class="text-xs font-bold text-slate-500 uppercase mb-1.5 tracking-wide">Persediaan
                                 Saat ini</p>
                             <p class="text-lg font-bold text-slate-700">Rp {{ persediaanSaatIni.toLocaleString('id-ID')
-                                }}</p>
+                            }}</p>
                             <p class="text-[10px] text-slate-400 mt-1">Bulan ini</p>
                         </div>
                     </div>
@@ -169,7 +192,7 @@
             </button>
 
             <RouterLink to="/"
-                class="mt-6 sm:mt-8 flex items-center justify-center text-sm font-medium text-slate-500 hover:text-slate-800 transition-colors">
+                class="mt-6 sm:mt-8 flex items-center justify-center text-sm font-medium text-white hover:text-slate-800 transition-colors">
                 <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M10 19l-7-7m0 0l7-7m-7 7h18" />
@@ -204,7 +227,10 @@ const isLoading = ref(false);
 // Variabel untuk PDF
 const totalHppBaru = ref(0);
 const dBiayaPemasaran = ref(0);
+const dBiayaListrikAirInternet = ref(0);
+const dBiayaPerlengkapan = ref(0);
 const dBiayaAdmin = ref(0);
+const dBiayaPajak = ref(0);
 const dBiayaSewa = ref(0);
 const dBiayaLain = ref(0);
 
@@ -236,12 +262,15 @@ const muatData = async () => {
     dBiayaAdmin.value = pengeluaranBulanIni.filter(p => p.jenis === 'admin').reduce((sum, item) => sum + item.nominal, 0);
     dBiayaSewa.value = pengeluaranBulanIni.filter(p => p.jenis === 'sewa').reduce((sum, item) => sum + item.nominal, 0);
     dBiayaLain.value = pengeluaranBulanIni.filter(p => p.jenis === 'lain_lain').reduce((sum, item) => sum + item.nominal, 0);
+    dBiayaListrikAirInternet.value = pengeluaranBulanIni.filter(p => p.jenis === 'listrik_air_internet').reduce((sum, item) => sum + item.nominal, 0);
+    dBiayaPerlengkapan.value = pengeluaranBulanIni.filter(p => p.jenis === 'perlengkapan').reduce((sum, item) => sum + item.nominal, 0);
+    dBiayaPajak.value = pengeluaranBulanIni.filter(p => p.jenis === 'pajak').reduce((sum, item) => sum + item.nominal, 0);
 
     // Hitung HPP dengan rumus baru
     totalHppBaru.value = penjualanBulanIni.reduce((sum, item) => sum + (Number(item.totalHpp) || 0), 0);
 
     // Rumus Laba Rugi: Penjualan - Total HPP Terjual - (Pengeluaran Lainnya)
-    labaBersih.value = totalJualBulanan.value - totalHppBaru.value - dBiayaPemasaran.value - dBiayaAdmin.value - dBiayaSewa.value - dBiayaLain.value;
+    labaBersih.value = totalJualBulanan.value - totalHppBaru.value - dBiayaPemasaran.value - dBiayaListrikAirInternet.value - dBiayaPerlengkapan.value - dBiayaAdmin.value - dBiayaPajak.value - dBiayaSewa.value - dBiayaLain.value;
 
     // Hitung Produk Terlaris / Sepi
     hitungStatistikProduk(penjualanBulanIni);
@@ -262,7 +291,7 @@ const hitungStatistikProduk = (penjualan) => {
             if (!rekap[produk.id]) {
                 rekap[produk.id] = { nama: produk.nama, qty: produk.quantity };
             } else {
-                // Jika barang sudah ada maka tambahkan quantity-nya
+                // Jika barang sudah ada maka cukup tambahkan quantity-nya saja
                 rekap[produk.id].qty += produk.quantity;
             }
         });
@@ -286,7 +315,10 @@ const eksporLabaRugi = async () => {
             ['Laba Kotor', `Rp ${(totalJualBulanan.value - totalHppBaru.value).toLocaleString('id-ID')}`],
             ['', ''],
             ['Dikurangi: Biaya Pemasaran', `(Rp ${dBiayaPemasaran.value.toLocaleString('id-ID')})`],
+            ['Dikurangi: Biaya Listrik, Air, dan Internet', `(Rp ${dBiayaListrikAirInternet.value.toLocaleString('id-ID')})`],
+            ['Dikurangi: Biaya Perlengkapan', `(Rp ${dBiayaPerlengkapan.value.toLocaleString('id-ID')})`],
             ['Dikurangi: Biaya Admin', `(Rp ${dBiayaAdmin.value.toLocaleString('id-ID')})`],
+            ['Dikurangi: Biaya Pajak', `(Rp ${dBiayaPajak.value.toLocaleString('id-ID')})`],
             ['Dikurangi: Biaya Sewa', `(Rp ${dBiayaSewa.value.toLocaleString('id-ID')})`],
             ['Dikurangi: Biaya Lain-lain', `(Rp ${dBiayaLain.value.toLocaleString('id-ID')})`],
             ['', ''],

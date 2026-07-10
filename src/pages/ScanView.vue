@@ -36,6 +36,21 @@
                 Mulai Pindai Barcode
             </button>
 
+            <div class="flex items-center gap-3 mt-5 mb-5">
+                <div class="h-px bg-slate-200 flex-1"></div>
+                <span class="text-xs font-medium text-slate-400 uppercase tracking-wider">Atau</span>
+                <div class="h-px bg-slate-200 flex-1"></div>
+            </div>
+
+            <div class="flex gap-2">
+                <input v-model="manualId" @keyup.enter="tambahManual" type="text" placeholder="Masukkan ID manual..."
+                    class="flex-1 px-4 py-4 sm:py-3.5 text-base sm:text-sm bg-white border border-slate-200 rounded-2xl sm:rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-shadow shadow-sm" />
+                <button @click="tambahManual"
+                    class="px-6 py-4 sm:py-3.5 text-base sm:text-sm font-bold text-white bg-slate-800 hover:bg-slate-900 active:scale-[0.99] rounded-2xl sm:rounded-xl transition-all shadow-sm">
+                    Tambah
+                </button>
+            </div>
+
             <div v-if="barangDitemukan?.length > 0" class="mt-8">
                 <div class="flex items-center justify-between mb-4 px-1 sm:px-0">
                     <h3 class="text-sm font-bold text-slate-800 uppercase tracking-wide">
@@ -134,10 +149,43 @@ const { showToast } = useToast();
 const isProcessing = ref(false);
 
 const barangDitemukan = ref([]);
+const manualId = ref('');
 
 const totalPenjualan = ref(0);
 const totalKeuntungan = ref(0);
 const totalHppKasir = ref(0); // Tambahan untuk melacak HPP transaksi
+
+const tambahProdukKeKeranjang = async (idProduk) => {
+    if (!idProduk) return;
+    const produk = await getProduct(idProduk);
+
+    if (produk) {
+        const existingItemIndex = barangDitemukan.value.findIndex(item => item.id === produk.id);
+
+        // Cek jumlah barang yang sudah ada di keranjang
+        const qtyDiKeranjang = existingItemIndex !== -1 ? barangDitemukan.value[existingItemIndex].quantity : 0;
+
+        // VALIDASI STOK
+        if (qtyDiKeranjang >= produk.quantity) {
+            showToast(`Stok "${produk.nama}" tidak mencukupi! Sisa stok sistem: ${produk.quantity}`, 'warning');
+            return; // Hentikan proses jika stok habis
+        }
+
+        if (existingItemIndex !== -1) {
+            barangDitemukan.value[existingItemIndex].quantity += 1;
+        } else {
+            produk.quantity = 1; // inject quantity dari database menjadi quantity nota penjualan
+            barangDitemukan.value.push(produk);
+        }
+
+        const modalHpp = Number(produk.hpp) || 0;
+        totalPenjualan.value += Number(produk.harga);
+        totalKeuntungan.value += (Number(produk.harga) - modalHpp);
+        totalHppKasir.value += modalHpp;
+    } else {
+        showToast(`Produk dengan ID "${idProduk}" tidak ditemukan.`, 'warning');
+    }
+};
 
 const mulaiScan = async () => {
     try {
@@ -147,38 +195,17 @@ const mulaiScan = async () => {
 
         if (result && result.ScanResult) {
             const scannedId = result.ScanResult;
-            const produk = await getProduct(scannedId);
-
-            if (produk) {
-                const existingItemIndex = barangDitemukan.value.findIndex(item => item.id === produk.id);
-
-                // Cek jumlah barang yang sudah ada di keranjang
-                const qtyDiKeranjang = existingItemIndex !== -1 ? barangDitemukan.value[existingItemIndex].quantity : 0;
-
-                // VALIDASI STOK
-                if (qtyDiKeranjang >= produk.quantity) {
-                    showToast(`Stok "${produk.nama}" tidak mencukupi! Sisa stok sistem: ${produk.quantity}`, 'warning');
-                    return; // Hentikan proses jika stok habis
-                }
-
-                if (existingItemIndex !== -1) {
-                    barangDitemukan.value[existingItemIndex].quantity += 1;
-                } else {
-                    produk.quantity = 1; // inject quantity dari database menjadi quantity nota penjualan
-                    barangDitemukan.value.push(produk);
-                }
-
-                const modalHpp = Number(produk.hpp) || 0;
-                totalPenjualan.value += Number(produk.harga);
-                totalKeuntungan.value += (Number(produk.harga) - modalHpp);
-                totalHppKasir.value += modalHpp;
-            } else {
-                showToast(`Produk belum terdaftar.`, 'warning');
-            }
+            await tambahProdukKeKeranjang(scannedId);
         }
     } catch (error) {
         console.error('Scan dibatalkan:', error);
     }
+};
+
+const tambahManual = async () => {
+    if (manualId.value.trim() === '') return;
+    await tambahProdukKeKeranjang(manualId.value.trim());
+    manualId.value = ''; // Reset input after adding
 };
 
 const prosesPenjualan = async () => {

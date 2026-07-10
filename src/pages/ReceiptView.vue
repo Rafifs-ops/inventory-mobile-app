@@ -103,26 +103,48 @@ onMounted(async () => {
 const unduhPDF = async () => {
     if (!transaksi.value) return;
     const doc = new jsPDF();
-    doc.setFontSize(18);
+    const warnaUtama = [41, 128, 185]; // Format RGB (Red, Green, Blue)
+
+    doc.setFontSize(22);
+    doc.setFont("helvetica", "bold");
+    doc.setTextColor(warnaUtama[0], warnaUtama[1], warnaUtama[2]);
     doc.text("Nota Penjualan - Smart Inventory", 14, 22);
 
     doc.setFontSize(11);
+    doc.setTextColor(0, 0, 0);
     doc.text(`Tanggal: ${transaksi.value.tanggal}`, 14, 30);
 
     const tableData = transaksi.value.items.map((p, index) => [
         index + 1,
         p.nama,
-        p.quantity,
         `Rp ${Number(p.harga).toLocaleString('id-ID')}`,
+        p.quantity,
         `Rp ${(Number(p.harga) * p.quantity).toLocaleString('id-ID')}`
     ]);
 
     autoTable(doc, {
         startY: 35,
-        head: [['No', 'Nama Produk', 'Qty', 'Harga', 'Subtotal']],
+        head: [['No', 'Nama Produk', 'Harga', 'Qty', 'Subtotal']],
         body: tableData,
         foot: [['', 'TOTAL', '', '', `Rp ${transaksi.value.totalPenjualan.toLocaleString('id-ID')}`]],
-        theme: 'striped'
+        theme: 'grid', // Memakai garis kotak-kotak sesuai referensi gambar
+        headStyles: {
+            fillColor: warnaUtama, // Warna background header tabel
+            textColor: 255, // Teks putih
+            fontStyle: 'bold',
+            halign: 'center'
+        },
+        footStyles: {
+            fillColor: [240, 240, 240], // Warna abu-abu terang untuk baris Total
+            textColor: [0, 0, 0],
+            fontStyle: 'bold',
+        },
+        columnStyles: {
+            0: { halign: 'left' },
+            1: { halign: 'right' },
+            2: { halign: 'center' },
+            3: { halign: 'right' } // Subtotal rata kanan agar sejajar angkanya
+        }
     });
 
     const finalY = doc.lastAutoTable.finalY;
@@ -136,11 +158,15 @@ const unduhPDF = async () => {
         // Format: addImage(imageData, format, x, y, width, height)
         doc.addImage(qrCodeBase64.value, 'PNG', posX, posY, qrSize, qrSize);
 
-        // Tambahkan teks petunjuk di sebelah atau di bawah QR Code
-        doc.setFontSize(9);
-        doc.text('Scan QR ini untuk melihat', posX + qrSize + 5, posY + 15);
-        doc.text('rincian nota secara online', posX + qrSize + 5, posY + 20);
+        // Teks di sebelah QR Code
+        doc.setFontSize(10);
+        doc.setFont("helvetica", "bold");
+        doc.setTextColor(warnaUtama[0], warnaUtama[1], warnaUtama[2]);
+        doc.text('Scan untuk Cek Nota Online', posX + qrSize + 5, posY + 15);
     }
+
+    const posYTerimaKasih = qrCodeBase64.value ? finalY + 45 : finalY + 20;
+    doc.text("Terima kasih telah berbelanja di UMKM Binaan BERDIKARI Hub.", 14, posYTerimaKasih);
 
     await saveAndSharePDF(doc, `Nota_${dayjs(transaksi.value.tanggal).format('YYYYMMDD_HHmmss')}.pdf`);
 };
