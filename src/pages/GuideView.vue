@@ -39,7 +39,7 @@ import { ref } from 'vue';
 const guides = ref([
     {
         title: 'HPP (Harga Pokok Penjualan)',
-        content: 'HPP adalah total keseluruhan biaya yang dikeluarkan secara langsung oleh bisnis untuk memproduksi barang atau jasa yang dijual. Ini biasanya mencakup biaya bahan baku dan biaya operasinal pembuatan produk.',
+        content: 'HPP adalah total keseluruhan biaya yang dikeluarkan secara langsung oleh bisnis untuk memproduksi barang atau jasa yang dijual. Ini biasanya mencakup biaya bahan baku dan biaya operasional pembuatan produk.',
         isOpen: false
     },
     {
@@ -58,8 +58,38 @@ const guides = ref([
         isOpen: false
     },
     {
+        title: 'Biaya Listrik, Air, dan Internet',
+        content: 'Biaya tagihan listrik, air, dan internet bulanan yang menunjang operasional bisnis Anda.',
+        isOpen: false
+    },
+    {
+        title: 'Biaya Perlengkapan',
+        content: 'Pengeluaran untuk barang-barang pendukung usaha yang biasanya cepat habis terpakai, tapi bukan bahan baku utama produk. Contohnya kardus packaging, bubble wrap, kantong belanja, stiker, atau nota kasir.',
+        isOpen: false
+    },
+    {
+        title: 'Biaya Pajak',
+        content: 'Kewajiban finansial yang harus disetorkan ke negara dari hasil usahamu. Untuk pengusaha atau UMKM, biasanya berupa Pajak Penghasilan (PPh) Final. Pastikan selalu disisihkan dari awal agar tidak mengganggu arus kas bisnis nanti.',
+        isOpen: false
+    },
+    {
         title: 'Biaya Lain-lain',
         content: 'Pengeluaran insidental, tak terduga, atau biaya bernilai kecil yang tidak dapat diklasifikasikan secara spesifik ke dalam kategori biaya utama (Pemasaran, Admin, atau Sewa).',
+        isOpen: false
+    },
+    {
+        title: 'Pendapatan (Omset)',
+        content: 'Total uang yang masuk dari hasil penjualan kamu sebelum dipotong biaya apa pun. Ibaratnya, ini adalah uang kotor yang masuk ke laci kasir atau rekening bisnis.',
+        isOpen: false
+    },
+    {
+        title: 'Laba Kotor (Gross Profit)',
+        content: 'Keuntungan awal dari jualan Anda setelah dikurangi modal pembuatan atau pembelian barang (HPP). Keuntungan ini belum bersih karena belum dipotong pengeluaran lainnya seperti pemasaran, admin, dan lain-lain.',
+        isOpen: false
+    },
+    {
+        title: 'Laba Bersih (Net Profit)',
+        content: 'Nah, ini dia cuan atau keuntungan murni yang benar-benar masuk kantong Anda! Angka ini didapat dari Laba Kotor yang sudah dikurangi dengan Total Biaya lainnya seperti pemasaran, admin, dan lain-lain.',
         isOpen: false
     },
     {

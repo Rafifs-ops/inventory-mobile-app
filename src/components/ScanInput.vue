@@ -17,12 +17,12 @@
         </div>
 
         <div class="flex flex-col gap-3">
-            <div class="flex gap-2">
+            <div class="flex gap-2 w-full">
                 <input v-model="manualId" @keyup.enter="handleTambahManual" type="text"
                     placeholder="Masukkan ID manual..."
-                    class="flex-1 px-4 py-4 sm:py-3.5 text-base sm:text-sm bg-white border border-slate-200 rounded-2xl sm:rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-shadow shadow-sm" />
+                    class="flex-1 min-w-0 px-4 py-4 sm:py-3.5 text-base sm:text-sm bg-white border border-slate-200 rounded-2xl sm:rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-shadow shadow-sm" />
                 <button @click="handleTambahManual"
-                    class="px-6 py-4 sm:py-3.5 text-base sm:text-sm font-bold text-white bg-slate-800 hover:bg-slate-900 active:scale-[0.99] rounded-2xl sm:rounded-xl transition-all shadow-sm">
+                    class="shrink-0 px-4 sm:px-6 py-4 sm:py-3.5 text-base sm:text-sm font-bold text-white bg-slate-800 hover:bg-slate-900 active:scale-[0.99] rounded-2xl sm:rounded-xl transition-all shadow-sm">
                     Tambah
                 </button>
             </div>

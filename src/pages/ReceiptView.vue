@@ -1,5 +1,6 @@
 <template>
-    <div class="min-h-screen bg-white sm:bg-slate-50 text-slate-900 pb-10 sm:py-12 flex flex-col items-center">
+    <div
+        class="min-h-screen bg-gradient-to-br from-blue-800 to-blue-600 text-slate-900 pb-10 sm:py-12 flex flex-col items-center">
         <div class="w-full sm:max-w-md px-5 sm:px-0">
             <div class="pt-6 sm:pt-0 mb-6 sm:mb-8 text-center border-b border-slate-100 sm:border-none pb-4 sm:pb-0">
                 <div class="inline-flex items-center justify-center w-16 h-16 bg-emerald-100 rounded-full mb-4">
@@ -7,8 +8,8 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
                     </svg>
                 </div>
-                <h2 class="text-2xl font-bold text-slate-900 tracking-tight">Transaksi Berhasil!</h2>
-                <p class="text-sm text-slate-500 mt-1.5">Penjualan telah disimpan ke sistem.</p>
+                <h2 class="text-2xl font-bold text-white tracking-tight">Transaksi Berhasil!</h2>
+                <p class="text-sm text-white mt-1.5">Penjualan telah disimpan ke sistem.</p>
             </div>
 
             <div class="bg-white border border-slate-200 rounded-2xl sm:rounded-xl shadow-sm overflow-hidden mb-6">
@@ -42,7 +43,7 @@
 
             <div class="space-y-3">
                 <button @click="unduhPDF"
-                    class="w-full flex items-center justify-center gap-2 py-4 sm:py-3.5 text-base sm:text-sm font-bold text-blue-700 bg-blue-50 border border-blue-200 rounded-2xl sm:rounded-xl shadow-sm hover:bg-blue-100 hover:shadow active:bg-blue-200 active:scale-[0.99] transition-all">
+                    class="w-full flex items-center justify-center gap-2 py-4 sm:py-3.5 text-base sm:text-sm font-bold text-white bg-red-600 border border-red-200 rounded-2xl sm:rounded-xl shadow-sm hover:bg-red-700 hover:shadow active:bg-red-800 active:scale-[0.99] transition-all">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
@@ -50,7 +51,7 @@
                     Unduh Nota (PDF)
                 </button>
                 <RouterLink to="/scan"
-                    class="w-full flex items-center justify-center gap-2 py-4 sm:py-3.5 text-base sm:text-sm font-bold text-white bg-blue-600 border border-transparent rounded-2xl sm:rounded-xl shadow-md hover:bg-blue-700 hover:shadow-lg active:bg-blue-800 active:scale-[0.99] transition-all">
+                    class="w-full flex items-center justify-center gap-2 py-4 sm:py-3.5 text-base sm:text-sm font-bold text-white bg-gradient-to-br from-green-600 to-green-400 border border-transparent rounded-2xl sm:rounded-xl shadow-md hover:shadow-lg active:scale-[0.99] transition-all">
                     Transaksi Baru
                 </RouterLink>
             </div>
@@ -164,10 +165,6 @@ const unduhPDF = async () => {
         doc.setTextColor(warnaUtama[0], warnaUtama[1], warnaUtama[2]);
         doc.text('Scan untuk Cek Nota Online', posX + qrSize + 5, posY + 15);
     }
-
-    const posYTerimaKasih = qrCodeBase64.value ? finalY + 45 : finalY + 20;
-    doc.text("Terima kasih telah berbelanja di UMKM Binaan BERDIKARI Hub.", 14, posYTerimaKasih);
-
     await saveAndSharePDF(doc, `Nota_${dayjs(transaksi.value.tanggal).format('YYYYMMDD_HHmmss')}.pdf`);
 };
 </script>

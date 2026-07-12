@@ -127,9 +127,6 @@ const unduhPDF = async (transaksi) => {
         doc.text('Scan untuk Cek Nota Online', posX + qrSize + 5, posY + 15);
     }
 
-    const posYTerimaKasih = finalY + 45;
-    doc.text("Terima kasih telah berbelanja di UMKM Binaan BERDIKARI Hub.", 14, posYTerimaKasih);
-
     await saveAndSharePDF(doc, `Nota_${dayjs(transaksi.tanggal).format('YYYYMMDD_HHmmss')}.pdf`);
 };
 </script>

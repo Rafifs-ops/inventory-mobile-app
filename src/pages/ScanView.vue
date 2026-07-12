@@ -26,7 +26,7 @@
                 </div>
 
                 <div class="space-y-3 sm:space-y-2.5">
-                    <CartItem v-for="(produk, index) in barangDitemukan" :key="index" :produk="produk"
+                    <CartItem v-for="(produk, index) in barangDitemukan.slice().reverse()" :key="index" :produk="produk"
                         @hapus="hapusItem(index)" />
                 </div>
 
