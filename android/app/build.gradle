@@ -1,10 +1,10 @@
 apply plugin: 'com.android.application'
 
 android {
-    namespace = "com.apps.inventory"
+    namespace = "com.rafifebrian.smartposumkm"
     compileSdk = rootProject.ext.compileSdkVersion
     defaultConfig {
-        applicationId "com.apps.inventory"
+        applicationId "com.rafifebrian.smartposumkm"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1

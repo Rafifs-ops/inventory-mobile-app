@@ -1,4 +1,4 @@
-package com.apps.inventory;
+package com.rafifebrian.smartposumkm;
 
 import com.getcapacitor.BridgeActivity;
 

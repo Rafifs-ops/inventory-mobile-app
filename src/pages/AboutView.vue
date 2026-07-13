@@ -170,7 +170,8 @@
                         <h4 class="mt-6 mb-2 text-base text-blue-900 font-bold border-b border-slate-100 pb-2">4. Hak
                             Kekayaan Intelektual</h4>
                         <p class="mb-4">Aplikasi, termasuk namun tidak terbatas pada desain, kode sumber (source code),
-                            logo, dan teks, adalah milik Rafi Febrian Suprapto dan dilindungi oleh hukum hak cipta dan
+                            logo, dan teks, adalah milik Rafi Febrian Suprapto sebagai developer, Windy Permata Suyono
+                            sebagai product owner, dan dilindungi oleh hukum hak cipta dan
                             kekayaan intelektual. Anda tidak diperbolehkan untuk menyalin, memodifikasi,
                             mendistribusikan, atau merekayasa balik (reverse engineer) Aplikasi tanpa izin tertulis dari
                             kami.</p>
@@ -185,7 +186,8 @@
 
                         <h4 class="mt-6 mb-2 text-base text-blue-900 font-bold border-b border-slate-100 pb-2">6.
                             Batasan Tanggung Jawab</h4>
-                        <p class="mb-4">Sejauh diizinkan oleh hukum, Rafi Febrian Suprapto tidak akan bertanggung jawab
+                        <p class="mb-4">Sejauh diizinkan oleh hukum, developer dan product owner tidak akan bertanggung
+                            jawab
                             atas kerusakan langsung, tidak langsung, insidental, atau konsekuensial, termasuk namun
                             tidak terbatas pada kerugian laba, kerugian bisnis, atau kehilangan data, yang timbul dari
                             penggunaan atau ketidakmampuan Anda menggunakan Aplikasi.</p>
