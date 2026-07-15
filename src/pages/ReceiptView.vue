@@ -96,7 +96,7 @@ onMounted(async () => {
         // Generate QR Code di sini setelah data transaksi di-fetch
         if (transaksi.value && transaksi.value.tokenNota) {
             const urlTujuan = `https://rafifs-ops.github.io/note-viewer-smartpos/?t=${transaksi.value.tokenNota}`;
-            qrCodeBase64.value = await QRCode.toDataURL(urlTujuan, { margin: 4, width: 500, errorCorrectionLevel: 'H' });
+            qrCodeBase64.value = await QRCode.toDataURL(urlTujuan, { margin: 4, width: 500, errorCorrectionLevel: 'L', scale: 4 });
         }
     }
     if (!transaksi.value) {
@@ -145,10 +145,11 @@ const unduhPDF = async () => {
             fontStyle: 'bold',
         },
         columnStyles: {
-            0: { halign: 'left' },
-            1: { halign: 'right' },
+            0: { halign: 'center' },
+            1: { halign: 'center' },
             2: { halign: 'center' },
-            3: { halign: 'right' } // Subtotal rata kanan agar sejajar angkanya
+            3: { halign: 'center' },
+            4: { halign: 'center' }
         }
     });
 

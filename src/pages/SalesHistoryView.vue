@@ -117,10 +117,11 @@ const unduhPDF = async (transaksi) => {
             fontStyle: 'bold',
         },
         columnStyles: {
-            0: { halign: 'left' },
-            1: { halign: 'right' },
+            0: { halign: 'center' },
+            1: { halign: 'center' },
             2: { halign: 'center' },
-            3: { halign: 'right' } // Subtotal rata kanan agar sejajar angkanya
+            3: { halign: 'center' },
+            4: { halign: 'center' }
         }
     });
 
@@ -129,7 +130,7 @@ const unduhPDF = async (transaksi) => {
     // -- KODE BARU: Menambahkan QR Code di bawah nota --
     if (transaksi.tokenNota) {
         const urlTujuan = `https://rafifs-ops.github.io/note-viewer-smartpos/?t=${transaksi.tokenNota}`;
-        const qrCodeBase64 = await QRCode.toDataURL(urlTujuan, { margin: 4, width: 500, errorCorrectionLevel: 'H' });
+        const qrCodeBase64 = await QRCode.toDataURL(urlTujuan, { margin: 4, width: 500, errorCorrectionLevel: 'L', scale: 4 });
         const qrSize = 40; // Lebar dan Tinggi QR Code dalam satuan dokumen (milimeter)
         const posX = 14;   // Jarak dari kiri
         const posY = finalY + 10; // Jarak dari tabel (turun sedikit)
