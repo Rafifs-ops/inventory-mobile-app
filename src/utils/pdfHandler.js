@@ -95,11 +95,6 @@ export const generateAndDownloadReceiptPDF = async (transaksi, preGeneratedQrBas
     doc.text(`Tanggal`, 14, 77);
     doc.text(`: ${transaksi.tanggal}`, 40, 77);
 
-    if (transaksi.tokenNota) {
-        doc.text(`Token Nota`, 14, 83);
-        doc.text(`: ${transaksi.tokenNota}`, 40, 83);
-    }
-
     // --- TABEL PRODUK ---
     const tableData = transaksi.items.map((p, index) => [
         index + 1,
@@ -172,9 +167,9 @@ export const generateAndDownloadReceiptPDF = async (transaksi, preGeneratedQrBas
     }
 
     if (qrData) {
-        const qrSize = 32;
-        const posX = 196 - qrSize; // Rata kanan (margin 14)
-        const posY = footerY - 5;
+        const qrSize = 100;
+        const posX = (210 - qrSize) / 2; // Rata tengah
+        const posY = footerY + 20; // Letakkan di bawah teks footer agar tidak bertabrakan
 
         // Background putih untuk QR code agar rapi
         doc.setFillColor(255, 255, 255);
