@@ -1,4 +1,4 @@
-package com.rafifebrian.smartposumkm;
+package com.rafifebrian.smartpos;
 
 import com.getcapacitor.BridgeActivity;
 

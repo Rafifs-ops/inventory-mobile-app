@@ -1,11 +1,11 @@
 <template>
     <div
-        class="min-h-screen bg-white sm:bg-slate-50 text-slate-900 flex flex-col sm:items-center sm:justify-center sm:py-12">
+        class="min-h-screen bg-gradient-to-br from-blue-800 to-blue-600 text-slate-900 flex flex-col sm:items-center sm:justify-center sm:py-12">
 
         <div
-            class="w-full sm:max-w-lg bg-white sm:rounded-2xl sm:shadow-xl sm:border sm:border-slate-200 overflow-hidden flex-grow sm:flex-grow-0 flex flex-col">
+            class="w-full sm:max-w-lg sm:rounded-2xl sm:shadow-xl overflow-hidden flex-grow sm:flex-grow-0 flex flex-col">
 
-            <div class="bg-slate-900 px-6 py-10 sm:py-12 text-center border-b-4 border-blue-600">
+            <div class="bg-slate-900 px-6 py-10 sm:py-12 text-center border-b-4 border-blue-500">
                 <h1 class="text-3xl sm:text-4xl font-bold text-white tracking-tight">
                     SmartPOS
                 </h1>
@@ -14,11 +14,11 @@
                 </p>
             </div>
 
-            <div class="p-5 sm:p-8 flex-grow bg-slate-50 bg-gradient-to-br from-blue-800 to-blue-600">
+            <div class="p-5 sm:p-8 flex-grow">
                 <div class="grid grid-cols-1 gap-3.5 sm:gap-4">
 
                     <button v-for="(menu, index) in daftarMenu" :key="index" @click="navigasiKe(menu.path)"
-                        :class="['group flex items-center p-4 bg-gradient-to-br from-blue-500 to-blue-400 border border-blue-800 rounded-xl hover:bg-blue-200 hover:shadow-md active:bg-slate-100 transition-all text-left shadow-sm sm:shadow-none', menu.classes.hoverBorder]">
+                        :class="['group flex items-center bg-gradient-to-br from-blue-600 to-blue-500 p-4 border border-blue-700 rounded-xl hover:bg-slate-50 hover:shadow-md active:bg-slate-100 transition-all text-left shadow-sm', menu.classes.hoverBorder]">
                         <div :class="['flex items-center justify-center w-14 h-14 sm:w-12 sm:h-12 rounded-xl shrink-0 group-hover:scale-105 transition-transform', menu.classes.bgIcon, menu.classes.textIcon]"
                             v-html="menu.icon">
                         </div>
@@ -27,7 +27,7 @@
                                 :class="['text-base text-lg font-bold text-slate-800 transition-colors tracking-tight', menu.classes.hoverText]">
                                 {{ menu.title }}
                             </h3>
-                            <p class="text-sm text-slate-800 mt-0.5 font-medium">{{ menu.desc }}</p>
+                            <p class="text-sm mt-0.5">{{ menu.desc }}</p>
                         </div>
                     </button>
 

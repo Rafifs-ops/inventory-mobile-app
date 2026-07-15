@@ -1,11 +1,11 @@
 <template>
     <div
-        class="min-h-screen bg-gradient-to-br from-blue-800 to-blue-600 sm:bg-slate-50 text-white flex flex-col sm:items-center sm:py-12">
+        class="min-h-screen bg-gradient-to-br from-blue-800 to-blue-600 text-slate-900 flex flex-col sm:items-center sm:py-12">
 
         <div
-            class="w-full sm:max-w-md bg-gradient-to-br from-blue-800 to-blue-600 sm:border sm:border-slate-200 sm:shadow-sm sm:rounded-2xl flex-grow sm:flex-grow-0 flex flex-col">
+            class="w-full sm:max-w-md sm:rounded-2xl sm:shadow-xl overflow-hidden flex-grow sm:flex-grow-0 flex flex-col">
 
-            <div class="px-5 pt-8 pb-6 sm:px-6 sm:pt-6 sm:pb-4 sm:border-none">
+            <div class="px-6 py-8 sm:py-8">
                 <h2 class="text-xl sm:text-2xl font-bold text-white tracking-tight">
                     Pencatatan Pengeluaran
                 </h2>

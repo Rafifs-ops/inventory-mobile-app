@@ -1,13 +1,13 @@
 <template>
     <div
-        class="min-h-screen bg-gradient-to-br from-blue-800 to-blue-600 text-white flex flex-col sm:items-center sm:py-12">
+        class="min-h-screen bg-gradient-to-br from-blue-800 to-blue-600 text-slate-900 flex flex-col sm:items-center sm:py-12">
 
         <div
-            class="w-full sm:max-w-lg bg-gradient-to-br from-blue-800 to-blue-600 sm:border sm:border-slate-200 sm:shadow-sm sm:rounded-2xl flex-grow sm:flex-grow-0 flex flex-col">
+            class="w-full sm:max-w-lg sm:rounded-2xl sm:shadow-xl overflow-hidden flex-grow sm:flex-grow-0 flex flex-col">
 
-            <div class="px-5 pt-8 pb-6 sm:px-6 sm:pt-6 sm:pb-4 sm:border-none text-center sm:text-left">
+            <div class="bg-slate-900 px-6 py-8 sm:py-8 text-center sm:text-left border-b-4 border-blue-500">
                 <h2 class="text-2xl font-bold text-white tracking-tight">Kalkulator HPP</h2>
-                <p class="text-sm text-white mt-1.5 leading-relaxed">
+                <p class="text-sm text-slate-400 mt-1.5 leading-relaxed">
                     Hitung Harga Pokok Penjualan dan simulasi target keuntungan
                 </p>
             </div>

@@ -1,9 +1,10 @@
 <template>
-    <div class="p-4 bg-gradient-to-br from-blue-800 to-blue-600 min-h-screen pb-20">
-        <div class="mb-6">
-            <h1 class="text-2xl font-bold text-white">Panduan Aplikasi</h1>
-            <p class="text-sm text-white mt-1">Definisi dan istilah seputar keuangan bisnis.</p>
-        </div>
+    <div class="min-h-screen bg-gradient-to-br from-blue-800 to-blue-600 pb-10 sm:py-12 flex flex-col items-center">
+        <div class="w-full sm:max-w-3xl px-5 sm:px-0 pt-6 sm:pt-0">
+            <div class="mb-6">
+                <h1 class="text-2xl font-bold text-white tracking-tight">Panduan Aplikasi</h1>
+                <p class="text-sm text-white mt-1.5">Definisi dan istilah seputar keuangan bisnis.</p>
+            </div>
 
         <!-- Dropdown / Accordion List -->
         <div class="space-y-3">
@@ -28,6 +29,7 @@
                         {{ item.content }}
                     </div>
                 </transition>
+            </div>
             </div>
         </div>
     </div>

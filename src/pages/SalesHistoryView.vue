@@ -3,7 +3,7 @@
         class="min-h-screen bg-gradient-to-br from-blue-800 to-blue-600 text-white pb-10 sm:py-12 flex flex-col items-center">
         <div class="w-full sm:max-w-3xl px-5 sm:px-0">
             <div
-                class="pt-6 sm:pt-0 mb-6 sm:mb-8 flex flex-col sm:flex-row sm:items-end justify-between gap-5 sm:gap-4">
+                class="pt-6 sm:pt-0 mb-6 sm:mb-8 text-center flex flex-col sm:flex-row sm:items-end justify-between gap-5 sm:gap-4">
                 <div>
                     <h2 class="text-2xl font-bold text-white tracking-tight">Riwayat Penjualan</h2>
                     <p class="text-sm text-white mt-1.5">Daftar transaksi penjualan yang telah selesai</p>
@@ -33,14 +33,29 @@
                 </div>
 
                 <div v-if="riwayat.length === 0"
-                    class="w-full px-6 py-16 text-center bg-slate-50 border-2 border-slate-200 border-dashed rounded-2xl shadow-sm">
-                    <svg class="mx-auto h-12 w-12 text-slate-400 mb-4" fill="none" viewBox="0 0 24 24"
-                        stroke="currentColor" aria-hidden="true">
+                    class="w-full px-6 py-16 text-center bg-slate-50/50 sm:bg-white border-2 border-slate-200 border-dashed rounded-2xl sm:rounded-xl shadow-sm">
+                    <svg class="mx-auto h-12 w-12 text-white mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                        aria-hidden="true">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
                     </svg>
-                    <p class="text-sm text-slate-500">Belum ada riwayat penjualan.</p>
+                    <h3 class="text-base font-bold text-white tracking-tight">Belum ada riwayat penjualan</h3>
+                    <p class="mt-1.5 text-sm text-white max-w-sm mx-auto">Tidak ada riwayat penjualan yang terdaftar di
+                        database
+                        saat ini.</p>
                 </div>
+
+                <div class="py-6 sm:py-0 sm:mt-8 w-full sm:max-w-3xl flex justify-center">
+                    <RouterLink to="/"
+                        class="flex items-center px-4 py-2 text-sm font-medium text-white hover:text-slate-800 transition-colors rounded-lg">
+                        <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                        </svg>
+                        Kembali ke Menu Utama
+                    </RouterLink>
+                </div>
+
             </div>
         </div>
     </div>
@@ -48,12 +63,14 @@
 
 <script setup>
 import { ref, onMounted } from 'vue';
+import { RouterLink } from 'vue-router';
 import { db } from '../database/db';
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
 import autoTable from 'jspdf-autotable';
 import { saveAndSharePDF } from '../utils/pdfHandler';
 import dayjs from 'dayjs';
+import QRCode from 'qrcode';
 
 const riwayat = ref([]);
 
@@ -112,8 +129,8 @@ const unduhPDF = async (transaksi) => {
     // -- KODE BARU: Menambahkan QR Code di bawah nota --
     if (transaksi.tokenNota) {
         const urlTujuan = `https://rafifs-ops.github.io/note-viewer-smartpos/?t=${transaksi.tokenNota}`;
-        const qrCodeBase64 = await QRCode.toDataURL(urlTujuan, { margin: 4, width: 400, errorCorrectionLevel: 'M', scale: 8 });
-        const qrSize = 35; // Lebar dan Tinggi QR Code dalam satuan dokumen (milimeter)
+        const qrCodeBase64 = await QRCode.toDataURL(urlTujuan, { margin: 4, width: 500, errorCorrectionLevel: 'H' });
+        const qrSize = 40; // Lebar dan Tinggi QR Code dalam satuan dokumen (milimeter)
         const posX = 14;   // Jarak dari kiri
         const posY = finalY + 10; // Jarak dari tabel (turun sedikit)
 
@@ -124,7 +141,7 @@ const unduhPDF = async (transaksi) => {
         doc.setFontSize(10);
         doc.setFont("helvetica", "bold");
         doc.setTextColor(warnaUtama[0], warnaUtama[1], warnaUtama[2]);
-        doc.text('Scan untuk Cek Nota Online', posX + qrSize + 5, posY + 15);
+        doc.text('Scan untuk Cek Nota Online', posX + qrSize + 5, posY + 20);
     }
 
     await saveAndSharePDF(doc, `Nota_${dayjs(transaksi.tanggal).format('YYYYMMDD_HHmmss')}.pdf`);

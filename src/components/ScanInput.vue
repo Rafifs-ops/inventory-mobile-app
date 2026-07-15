@@ -12,7 +12,7 @@
 
         <div class="flex items-center gap-3 mt-5 mb-5">
             <div class="h-px bg-slate-200 flex-1"></div>
-            <span class="text-xs font-medium text-slate-400 uppercase tracking-wider">Atau</span>
+            <span class="text-xs font-medium text-white uppercase tracking-wider">Atau</span>
             <div class="h-px bg-slate-200 flex-1"></div>
         </div>
 

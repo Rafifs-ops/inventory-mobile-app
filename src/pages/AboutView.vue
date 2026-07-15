@@ -10,7 +10,7 @@
                 <h1 class="m-0 text-3xl font-extrabold text-white tracking-tight">SmartPOS</h1>
                 <span
                     class="mt-3 px-3 py-1 text-xs font-semibold text-blue-700 bg-blue-100 rounded-full shadow-sm">Versi
-                    1.0.0</span>
+                    1.0.1</span>
             </section>
 
             <section class="text-center text-white text-[0.95rem] leading-relaxed mb-10 w-full max-w-md">

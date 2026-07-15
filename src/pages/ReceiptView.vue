@@ -58,7 +58,11 @@
 
             <div class="mt-6 w-full flex justify-center">
                 <RouterLink to="/"
-                    class="flex items-center px-4 py-2 text-sm font-medium text-slate-500 hover:text-slate-800 transition-colors rounded-lg">
+                    class="flex items-center px-4 py-2 text-sm font-medium text-white transition-colors rounded-lg">
+                    <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                    </svg>
                     Kembali ke Beranda
                 </RouterLink>
             </div>
@@ -92,7 +96,7 @@ onMounted(async () => {
         // Generate QR Code di sini setelah data transaksi di-fetch
         if (transaksi.value && transaksi.value.tokenNota) {
             const urlTujuan = `https://rafifs-ops.github.io/note-viewer-smartpos/?t=${transaksi.value.tokenNota}`;
-            qrCodeBase64.value = await QRCode.toDataURL(urlTujuan, { margin: 4, width: 400, errorCorrectionLevel: 'M', scale: 8 });
+            qrCodeBase64.value = await QRCode.toDataURL(urlTujuan, { margin: 4, width: 500, errorCorrectionLevel: 'H' });
         }
     }
     if (!transaksi.value) {
@@ -152,7 +156,7 @@ const unduhPDF = async () => {
 
     // -- KODE BARU: Menambahkan QR Code di bawah nota --
     if (qrCodeBase64.value) {
-        const qrSize = 35; // Lebar dan Tinggi QR Code dalam satuan dokumen (milimeter)
+        const qrSize = 40; // Lebar dan Tinggi QR Code dalam satuan dokumen (milimeter)
         const posX = 14;   // Jarak dari kiri
         const posY = finalY + 10; // Jarak dari tabel (turun sedikit)
 
@@ -163,7 +167,7 @@ const unduhPDF = async () => {
         doc.setFontSize(10);
         doc.setFont("helvetica", "bold");
         doc.setTextColor(warnaUtama[0], warnaUtama[1], warnaUtama[2]);
-        doc.text('Scan untuk Cek Nota Online', posX + qrSize + 5, posY + 15);
+        doc.text('Scan untuk Cek Nota Online', posX + qrSize + 5, posY + 20);
     }
     await saveAndSharePDF(doc, `Nota_${dayjs(transaksi.value.tanggal).format('YYYYMMDD_HHmmss')}.pdf`);
 };

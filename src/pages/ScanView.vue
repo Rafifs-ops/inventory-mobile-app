@@ -17,7 +17,7 @@
 
             <div v-if="barangDitemukan?.length > 0" class="mt-8">
                 <div class="flex items-center justify-between mb-4 px-1 sm:px-0">
-                    <h3 class="text-sm font-bold text-slate-800 uppercase tracking-wide">
+                    <h3 class="text-sm font-bold text-white uppercase tracking-wide">
                         Daftar Belanja
                     </h3>
                     <span class="px-2.5 py-1 bg-slate-100 text-slate-600 text-xs font-bold rounded-full">

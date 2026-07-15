@@ -16,7 +16,7 @@
                         Periode Laporan
                     </label>
                     <input type="month" v-model="filterBulan" @change="muatData"
-                        class="w-full sm:w-56 px-4 py-3 sm:py-2.5 text-base sm:text-sm text-slate-900 bg-slate-50 sm:bg-white border border-slate-300 rounded-xl sm:rounded-lg shadow-sm focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-blue-600 transition-colors">
+                        class="w-full sm:w-56 px-4 py-3 sm:py-2.5 text-base sm:text-sm text-slate-900 bg-white border border-slate-300 rounded-xl sm:rounded-lg shadow-sm focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-blue-600 transition-colors">
                 </div>
             </div>
 

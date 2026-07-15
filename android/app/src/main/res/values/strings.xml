@@ -2,6 +2,6 @@
 <resources>
     <string name="app_name">SmartPOS UMKM</string>
     <string name="title_activity_main">SmartPOS UMKM</string>
-    <string name="package_name">com.rafifebrian.smartposumkm</string>
-    <string name="custom_url_scheme">com.rafifebrian.smartposumkm</string>
+    <string name="package_name">com.rafifebrian.smartpos</string>
+    <string name="custom_url_scheme">com.rafifebrian.smartpos</string>
 </resources>
