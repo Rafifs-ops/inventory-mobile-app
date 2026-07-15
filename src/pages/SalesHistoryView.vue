@@ -65,12 +65,7 @@
 import { ref, onMounted } from 'vue';
 import { RouterLink } from 'vue-router';
 import { db } from '../database/db';
-import jsPDF from 'jspdf';
-import 'jspdf-autotable';
-import autoTable from 'jspdf-autotable';
-import { saveAndSharePDF } from '../utils/pdfHandler';
-import dayjs from 'dayjs';
-import QRCode from 'qrcode';
+import { generateAndDownloadReceiptPDF } from '../utils/pdfHandler';
 
 const riwayat = ref([]);
 
@@ -79,72 +74,6 @@ onMounted(async () => {
 });
 
 const unduhPDF = async (transaksi) => {
-    const doc = new jsPDF();
-    const warnaUtama = [41, 128, 185]; // Format RGB (Red, Green, Blue)
-
-    doc.setFontSize(22);
-    doc.setFont("helvetica", "bold");
-    doc.setTextColor(warnaUtama[0], warnaUtama[1], warnaUtama[2]);
-    doc.text("Nota Penjualan - Smart Inventory", 14, 22);
-
-    doc.setFontSize(11);
-    doc.setTextColor(0, 0, 0);
-    doc.text(`Tanggal: ${transaksi.tanggal}`, 14, 30);
-
-    const tableData = transaksi.items.map((p, index) => [
-        index + 1,
-        p.nama,
-        `Rp ${Number(p.harga).toLocaleString('id-ID')}`,
-        p.quantity,
-        `Rp ${(Number(p.harga) * p.quantity).toLocaleString('id-ID')}`
-    ]);
-
-    autoTable(doc, {
-        startY: 35,
-        head: [['No', 'Nama Produk', 'Harga', 'Qty', 'Subtotal']],
-        body: tableData,
-        foot: [['', 'TOTAL', '', '', `Rp ${transaksi.totalPenjualan.toLocaleString('id-ID')}`]],
-        theme: 'grid', // Memakai garis kotak-kotak sesuai referensi gambar
-        headStyles: {
-            fillColor: warnaUtama, // Warna background header tabel
-            textColor: 255, // Teks putih
-            fontStyle: 'bold',
-            halign: 'center'
-        },
-        footStyles: {
-            fillColor: [240, 240, 240], // Warna abu-abu terang untuk baris Total
-            textColor: [0, 0, 0],
-            fontStyle: 'bold',
-        },
-        columnStyles: {
-            0: { halign: 'center' },
-            1: { halign: 'center' },
-            2: { halign: 'center' },
-            3: { halign: 'center' },
-            4: { halign: 'center' }
-        }
-    });
-
-    const finalY = doc.lastAutoTable.finalY;
-
-    // -- KODE BARU: Menambahkan QR Code di bawah nota --
-    if (transaksi.tokenNota) {
-        const urlTujuan = `https://rafifs-ops.github.io/note-viewer-smartpos/?t=${transaksi.tokenNota}`;
-        const qrCodeBase64 = await QRCode.toDataURL(urlTujuan, { margin: 4, width: 500, errorCorrectionLevel: 'L', scale: 4 });
-        const qrSize = 40; // Lebar dan Tinggi QR Code dalam satuan dokumen (milimeter)
-        const posX = 14;   // Jarak dari kiri
-        const posY = finalY + 10; // Jarak dari tabel (turun sedikit)
-
-        // Format: addImage(imageData, format, x, y, width, height)
-        doc.addImage(qrCodeBase64, 'PNG', posX, posY, qrSize, qrSize);
-
-        // Teks di sebelah QR Code
-        doc.setFontSize(10);
-        doc.setFont("helvetica", "bold");
-        doc.setTextColor(warnaUtama[0], warnaUtama[1], warnaUtama[2]);
-        doc.text('Scan untuk Cek Nota Online', posX + qrSize + 5, posY + 20);
-    }
-
-    await saveAndSharePDF(doc, `Nota_${dayjs(transaksi.tanggal).format('YYYYMMDD_HHmmss')}.pdf`);
+    await generateAndDownloadReceiptPDF(transaksi);
 };
 </script>
