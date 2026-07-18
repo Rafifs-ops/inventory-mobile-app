@@ -37,7 +37,8 @@
                     </div>
 
                     <img :src="qrCodeBase64" alt="QR Code Nota"
-                        class="w-40 h-40 object-contain bg-white p-2 rounded-lg shadow-sm border border-slate-100 my-3 mx-auto text-center" />
+                        :style="{ width: qrDisplaySize + 'px', height: qrDisplaySize + 'px', maxWidth: '100%' }"
+                        class="object-contain bg-white p-2 rounded-lg shadow-sm border border-slate-100 my-3 mx-auto text-center" />
                 </div>
             </div>
 
@@ -71,7 +72,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { db } from '../database/db';
 import { generateAndDownloadReceiptPDF } from '../utils/pdfHandler';
@@ -84,6 +85,13 @@ const { showToast } = useToast();
 const transaksi = ref(null);
 
 const qrCodeBase64 = ref(null);
+
+const qrDisplaySize = computed(() => {
+    const baseSize = 160; // Ukuran dasar (w-40 h-40 = 160px)
+    const itemCount = transaksi.value?.items?.length || 0;
+    // Tambah 15px per jenis barang, maksimum 320px
+    return Math.min(baseSize + (itemCount * 15), 320);
+});
 
 onMounted(async () => {
     const id = Number(route.query.id);

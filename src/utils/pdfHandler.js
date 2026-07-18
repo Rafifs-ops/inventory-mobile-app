@@ -169,7 +169,13 @@ export const generateAndDownloadReceiptPDF = async (transaksi, preGeneratedQrBas
     if (qrData) {
         const qrSize = 100;
         const posX = (210 - qrSize) / 2; // Rata tengah
-        const posY = footerY + 20; // Letakkan di bawah teks footer agar tidak bertabrakan
+        let posY = footerY + 20; // Letakkan di bawah teks footer agar tidak bertabrakan
+
+        const pageHeight = doc.internal.pageSize.getHeight();
+        if (posY + qrSize + 15 > pageHeight - 15) { // 15mm extra padding
+            doc.addPage();
+            posY = 20; // Reset Y ke atas halaman baru
+        }
 
         // Background putih untuk QR code agar rapi
         doc.setFillColor(255, 255, 255);
