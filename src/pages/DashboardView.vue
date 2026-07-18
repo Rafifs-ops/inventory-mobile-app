@@ -68,7 +68,7 @@
                             <p class="text-xs font-bold text-slate-500 uppercase mb-1.5 tracking-wide">Persediaan
                                 Saat ini</p>
                             <p class="text-lg font-bold text-slate-700">Rp {{ persediaanSaatIni.toLocaleString('id-ID')
-                                }}</p>
+                            }}</p>
                             <p class="text-[10px] text-slate-400 mt-1">Bulan ini</p>
                         </div>
                     </div>
@@ -237,7 +237,7 @@ const eksporLabaRugi = async () => {
         theme: 'grid',
         styles: { fontSize: 12 },
         willDrawCell: function (data) {
-            if (data.row.index === 9) { // Baris Laba Bersih
+            if (data.row.index === 12) { // Baris Laba Bersih
                 doc.setFont(undefined, 'bold');
                 doc.setTextColor(labaBersih.value >= 0 ? 0 : 255, labaBersih.value >= 0 ? 128 : 0, 0);
             }
