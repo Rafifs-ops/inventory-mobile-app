@@ -5,14 +5,21 @@
         <div
             class="w-full sm:max-w-lg sm:rounded-2xl sm:shadow-xl overflow-hidden flex-grow sm:flex-grow-0 flex flex-col">
 
-            <div class="bg-slate-900 px-6 py-10 sm:py-12 text-center border-b-4 border-blue-500">
+            <div class="bg-slate-900 px-6 min-h-[150px] pt-10 text-center border-b-4 border-blue-500">
                 <h1
                     class="text-3xl sm:text-4xl font-bold tracking-tight bg-gradient-to-r from-blue-600 via-blue-500 to-green-500 bg-clip-text text-transparent">
                     SmartPOS UMKM
                 </h1>
-                <p class="text-slate-400 text-sm sm:text-base mt-2.5 font-medium">
-                    Sistem <i>Point of Sale</i> Terpadu
-                </p>
+                <div class="flex flex-col justify-between items-center gap-3 h-full">
+                    <p
+                        class="bg-gradient-to-r from-blue-600 via-blue-500 to-green-500 bg-clip-text text-transparent text-md font-medium">
+                        Sistem <i>Point of Sale</i> Terpadu
+                    </p>
+                    <p
+                        class="bg-gradient-to-r from-blue-600 via-blue-500 to-green-500 bg-clip-text text-transparent text-xs font-medium">
+                        Developed by Rafi Febrian Suprapto
+                    </p>
+                </div>
             </div>
 
             <div class="p-5 sm:p-8 flex-grow">
